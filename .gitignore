@@ -1,6 +1,11 @@
-# files
+# ~~~~ files ~~~~
 *.swp
 *.aux
 *.log
 
-# directories
+# ~~ latex ~~
+*.fdb_latexmk
+*.fls
+*.toc
+
+# ~~~~ directories ~~~~

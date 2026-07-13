@@ -9,11 +9,45 @@
 #
 #			- Split 32-bit addresses according to instr imm handling.
 
+.data
+# ~~~~~~~~ Test Cases ~~~~~~~~
+# TC1 : zero
+#A:	.half 0
+#	answer= 0x0000
 
+# TC2 : positive 
+#A:	.half 0x5
+#	answer= 0xFFFB (-5)
+
+# TC3 : negative 
+#A:	.half 0xFFFB		# -5
+#	answer= 0x0005		#  5
+
+# TC4 : positive 
+#A:	.half 0x5678		# 22136
+#	answer= 0xA988		# -22136
+
+# TC5 : reverse
+#A:	.half 0xA988		
+#	answer= 0x5678
+
+# TC6 : negative 
+#A : .half 0xFFFF #(-1)
+#	answer= 1
+
+# TC7 : negative 2
+#A : .half 0xFFFE #(-2)
+#	answer= 2
+
+# TC7 : negative 32 bit
+#A : .word 0x89ABCDEF		#(0xCDEF = -12817)
+#	answer= 0x3211			# 12817
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
 .global _start
-
+.text
 #.equ SWITCHES_H,	0x11000	# upper 20 bits
 #.equ SWITCHES_L,	0x000	# lower 12 bits
 .equ SWITCHES_H,	0x00006	# upper 20 bits (data seg at 0x00006000)
@@ -24,14 +58,7 @@
 .equ LEDS_H,		0x00006 # upper 20 bits (data seg at 0x00006020)
 .equ LEDS_L,		0x020	# lower 12 bits
 
-# ~~~~~~~~ Test Cases ~~~~~~~~
-# TC1 : zero
-.equ READ1_H,		0x00000	# switch first read (0)
-.equ READ1_L, 		0x0
-#	answer= 0x0000
 
-
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 _start:
 
@@ -52,17 +79,17 @@ _start:
 
 	# ~~~~ read SWITCHES and sum ~~~~
 
-	# ~~ behind the scenes : switch mem changes value ~~
-	lui t3, READ1_H
-	ori t3, t3, READ1_L
-	sw t3, 0(s0)			# only 3 bytes are stored (0x234)
+	# ~~ behind the scenes : switch value ~~
+	lw t3, A
+	sw t3, 0(s0)			
 	# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	lhu  t0, 0(s0)			# first read
 
 
-	# ~~~~ invert the sign
-	
+	# ~~~~ invert the sign (2sC) ~~~~
+	not t0, t0
+	addi t0, t0, 1
 
 	# ~~~~ Write the unsigned half word to LEDS mem addr
 	sh t0, 0(s1)

@@ -2,6 +2,7 @@
 *.swp
 *.aux
 *.log
+*.pdf
 
 # ~~ latex ~~
 *.fdb_latexmk

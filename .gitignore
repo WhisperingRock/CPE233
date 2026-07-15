@@ -9,4 +9,10 @@
 *.fls
 *.toc
 
+# ~~ vivado ~~
+*.cache*
+*.hw*
+*.ip_user_files*
+*.sim*
+
 # ~~~~ directories ~~~~

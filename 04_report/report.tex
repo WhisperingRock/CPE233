@@ -104,6 +104,88 @@
 
 	\section{Hardware}
 
+		\subsection{A1 - Program ROM}
+
+			\subsubsection{Reverse Engineer'd Table}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth, page=732]{../00_books/Digital Design and Computer Architecture RISC-V Edition (Sarah Harris, David Harris) (Z-Library).pdf}
+				\end{figure}
+
+				\begin{table}[H]
+					\centering
+					\label{tab:hw_a1_reverseTable}
+					\begin{tabular}{||c|c|c|c||}
+						\hline
+						\textbf{ProgROM Addr} & \textbf{Machine Code} & \textbf{Type} & \textbf{Assembly Instruction} \\\hline
+						0000 & \tiny{0x1100 0537} & & \\ \hline
+							 & \tiny{0001 0001 0000 0000 0000 0101 0\colorbox{yellow}{011 0111}} & (55) U  & \texttt{lui rd, upimm}\\ \hline
+							 & \tiny{\colorbox{lightgray}{0001 0001 0000 0000 0000} \colorbox{cyan}{0101 0}011 0111} & (55) U  & \texttt{lui \colorbox{cyan}{x10}, \colorbox{lightgray}{0x11000}}\\ \hline
+
+						0004 & \tiny{0x00A0 0F13} & & \\ \hline
+							 & \tiny{0000 0000 1010 0000 0\colorbox{green}{000} 1111 0\colorbox{yellow}{001 0011}} & (19)I & \texttt{addi rd, rs1, imm}\\ \hline
+							 & \tiny{\colorbox{lightgray}{0000 0000 1010} \colorbox{orange}{0000 0}000 \colorbox{cyan}{1111 0}001 0011} & (19)I & \texttt{addi \colorbox{cyan}{x30}, \colorbox{orange}{x0}, \colorbox{lightgray}{0x00A}}\\ \hline
+
+						0008 & \tiny{0x0005 1783} & & \\ \hline
+							 & \tiny{0000 0000 0000 0101 0\colorbox{green}{001} 0111 1\colorbox{yellow}{000 0011}} & (3)I & \texttt{lh rd, imm(rs1)}\\ \hline
+							 & \tiny{\colorbox{lightgray}{0000 0000 0000} \colorbox{orange}{0101 0}001 \colorbox{cyan}{0111 1}000 0011} & (3)I & \texttt{lh \colorbox{cyan}{x15}, \colorbox{lightgray}{0}(\colorbox{orange}{x10})}\\ \hline
+
+						000C & \tiny{0x41E7 DA33} & & \\ \hline
+							 & \tiny{\colorbox{magenta}{0100 000}1 1110 0111 1\colorbox{green}{101} 1010 0\colorbox{yellow}{011 0011}} & (51)R & \texttt{sra rd, rs1, rs2}\\ \hline
+							 & \tiny{0100 000\colorbox{lime}{1 1110} \colorbox{orange}{0111 1}101 \colorbox{cyan}{1010 0}011 0011} & (51)R & \texttt{sra \colorbox{cyan}{x20}, \colorbox{orange}{x15}, \colorbox{lime}{x30}}\\ \hline
+
+						0010 & \tiny{0x00FA 4633} & & \\ \hline
+							 & \tiny{0000 0000 1111 1010 0\colorbox{green}{100} 0110 0\colorbox{yellow}{011 0011}} & (51)R & \texttt{xor rd, rs1, rs2}\\ \hline
+							 & \tiny{0000 000\colorbox{lime}{0 1111} \colorbox{orange}{1010 0}100 \colorbox{cyan}{0110 0}011 0011} &(51)R & \texttt{xor \colorbox{cyan}{x12}, \colorbox{orange}{x20}, \colorbox{lime}{x15}}\\ \hline
+
+						0014 & \tiny{0x04C5 2023} & & \\ \hline
+							 & \tiny{0000 0100 1100 0101 0\colorbox{green}{010} 0000 0\colorbox{yellow}{010 0011}} & (35)S & \texttt{sw rs2, imm(rs1)}\\ \hline
+							 & \tiny{\colorbox{lightgray}{0000 010}\colorbox{lime}{0 1100} \colorbox{orange}{0101 0}010 \colorbox{lightgray}{0000 0}010 0011} & (35)S &  \texttt{sw \colorbox{lime}{x12}, \colorbox{lightgray}{0x040}(\colorbox{orange}{x10})}\\ \hline
+
+						0018 & \tiny{0xFF1F F06F} & & \\ \hline
+							 & \tiny{1111 1111 0001 1111 1111 0000 0\colorbox{yellow}{110 1111}} & (111)J & \texttt{jal rd, label}\\ \hline
+							 & \tiny{\colorbox{lightgray}{1111 1111 0001 1111 1111} \colorbox{cyan}{0000 0}110 1111} & (111)J & \texttt{jal \colorbox{cyan}{x0}, \colorbox{lightgray}{-16}}\\ \hline
+
+					\end{tabular}
+					\caption{Reverse Engineering \textit{otter\_memory.mem} segment}
+				\end{table}
+
+				For the last command, some explanation is required here. 
+				Consider
+				\begin{itemize}
+					\item $Imm[20] = B31 = 1$
+					\item $Imm[10:1] = B30:B21 = 1111 111 000$
+					\item $Imm[11] = B20 = 1$
+					\item $Imm[19:12] = B19:B12 = 1111 1111$
+					\item $Imm[0]$ is always zero
+					\item Therefore,  $Imm = 0x1FFFF0$
+				\end{itemize}
+
+				To find the decimal representation, consider adding our
+				large negative number to the next highest max. 
+
+				\begin{align*}
+					2^{21} - 0x1FFFF0 &= 0x200000 - 0x1FFFF0 \\
+					&= -0x10 \\
+					&= -16 \\
+				\end{align*}	
+
+
+				BUT WAIT! \texttt{jal} doesn't take immediates, only labels.
+
+				True, our label must be 4 spaces prior to this jump - 
+				fill this portion in with a label in the asm and
+				respect the spacing. 
+
+			\subsubsection{Assembly Code}
+				\lstinputlisting[language={[riscv]Assembler}, captionpos=top,
+											caption={Assembly of HW1},
+											breaklines=false]{../03_hardware/a1/reverse.asm}
+
+
+			\subsubsection{Files}
+
 	\newpage
 	\section{Software}
 

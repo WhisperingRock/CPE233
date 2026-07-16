@@ -110,12 +110,18 @@
 
 				\begin{figure}[H]
 					\centering
+					\includegraphics[width=0.5\textwidth]{../03_hardware/a1/photos/given.png}
+					\caption{Which Table? This table}
+					\label{fig:hw1_table}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
 					\includegraphics[width=0.8\textwidth, page=732]{../00_books/Digital Design and Computer Architecture RISC-V Edition (Sarah Harris, David Harris) (Z-Library).pdf}
 				\end{figure}
 
 				\begin{table}[H]
 					\centering
-					\label{tab:hw_a1_reverseTable}
 					\begin{tabular}{||c|c|c|c||}
 						\hline
 						\textbf{ProgROM Addr} & \textbf{Machine Code} & \textbf{Type} & \textbf{Assembly Instruction} \\\hline
@@ -149,6 +155,7 @@
 
 					\end{tabular}
 					\caption{Reverse Engineering \textit{otter\_memory.mem} segment}
+					\label{tab:hw_a1_reverseTable}
 				\end{table}
 
 				For the last command, some explanation is required here. 
@@ -178,13 +185,48 @@
 				fill this portion in with a label in the asm and
 				respect the spacing. 
 
+				
 			\subsubsection{Assembly Code}
 				\lstinputlisting[language={[riscv]Assembler}, captionpos=top,
 											caption={Assembly of HW1},
 											breaklines=false]{../03_hardware/a1/reverse.asm}
 
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.5\textwidth]{../03_hardware/a1/photos/memconfig}
+					\caption{Segment Address Config}
+					\label{fig:-03_hardware-a1-photos-memconfig}
+				\end{figure}
 
-			\subsubsection{Files}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.5\textwidth]{../03_hardware/a1/photos/dumpconfig}
+					\caption{Memory Dump Config}
+					\label{fig:-03_hardware-a1-photos-dumpconfig}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../03_hardware/a1/photos/RARS_instr.png}
+					\caption{RARS instruction addresses alongside code}
+					\label{fig:hw1_rars}
+				\end{figure}
+
+
+			\subsubsection{Vivado Simulation}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/a1/photos/waveform.png}
+					\caption{Simulation waveform of \texttt{ProgROM\_tb.sv} running
+						\texttt{otter\_memory\_hw1.mem}}
+					\label{fig:hw1_waveform}
+				\end{figure}
+
+				By inspection, the instructions in the waveform \ref{fig:hw1_waveform}
+				match those in RARS\ref{fig:hw1_rars} and our decoded 
+				table \ref{tab:hw_a1_reverseTable}
+
 
 	\newpage
 	\section{Software}

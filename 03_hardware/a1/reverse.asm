@@ -7,13 +7,18 @@
 
 
 .data
+A:	.word 0x1234		# dummy value to see change
 
 .global _start
 
 .text
+.equ	MMIO, 0x11000000
 
 _start:
 	# ~~~~ init registers ~~~~
+	li t1, MMIO
+	lw t2, A
+	sw t2, 0(t1)
 
 	# ~~~~ decoded instr ~~~~
 	#lui x10, 0x11000

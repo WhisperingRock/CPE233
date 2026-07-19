@@ -80,7 +80,8 @@
 	showspaces=false,
 	showstringspaces=false,
 	showtabs=false,
-	tabsize=2
+	tabsize=2,
+	float=H
 }
 
 \lstset{style=mystyle}
@@ -104,13 +105,13 @@
 
 	\section{Hardware}
 
-		\subsection{A1 - Program ROM}
+		\subsection{HW1 - Program ROM}
 
 			\subsubsection{Reverse Engineer'd Table}
 
 				\begin{figure}[H]
 					\centering
-					\includegraphics[width=0.5\textwidth]{../03_hardware/a1/photos/given.png}
+					\includegraphics[width=0.5\textwidth]{../03_hardware/hw1/photos/given.png}
 					\caption{Which Table? This table}
 					\label{fig:hw1_table}
 				\end{figure}
@@ -189,25 +190,25 @@
 			\subsubsection{Assembly Code}
 				\lstinputlisting[language={[riscv]Assembler}, captionpos=top,
 											caption={Assembly of HW1},
-											breaklines=false]{../03_hardware/a1/reverse.asm}
+											breaklines=false]{../03_hardware/hw1/reverse.asm}
 
 				\begin{figure}[H]
 					\centering
-					\includegraphics[width=0.5\textwidth]{../03_hardware/a1/photos/memconfig}
+					\includegraphics[width=0.5\textwidth]{../03_hardware/hw1/photos/memconfig}
 					\caption{Segment Address Config}
 					\label{fig:-03_hardware-a1-photos-memconfig}
 				\end{figure}
 
 				\begin{figure}[H]
 					\centering
-					\includegraphics[width=0.5\textwidth]{../03_hardware/a1/photos/dumpconfig}
+					\includegraphics[width=0.5\textwidth]{../03_hardware/hw1/photos/dumpconfig}
 					\caption{Memory Dump Config}
 					\label{fig:-03_hardware-a1-photos-dumpconfig}
 				\end{figure}
 
 				\begin{figure}[H]
 					\centering
-					\includegraphics[width=0.8\textwidth]{../03_hardware/a1/photos/RARS_instr.png}
+					\includegraphics[width=0.8\textwidth]{../03_hardware/hw1/photos/RARS_instr.png}
 					\caption{RARS instruction addresses alongside code}
 					\label{fig:hw1_rars}
 				\end{figure}
@@ -217,7 +218,7 @@
 
 				\begin{figure}[H]
 					\centering
-					\includegraphics[width=\textwidth]{../03_hardware/a1/photos/waveform.png}
+					\includegraphics[width=\textwidth]{../03_hardware/hw1/photos/waveform.png}
 					\caption{Simulation waveform of \texttt{ProgROM\_tb.sv} running
 						\texttt{otter\_memory\_hw1.mem}}
 					\label{fig:hw1_waveform}
@@ -226,6 +227,77 @@
 				By inspection, the instructions in the waveform \ref{fig:hw1_waveform}
 				match those in RARS\ref{fig:hw1_rars} and our decoded 
 				table \ref{tab:hw_a1_reverseTable}
+		
+
+
+		\subsection{HW2 - Program Counter}
+
+			\subsubsection{Intended Behavior(s)}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw2/target.png}
+					\caption{Program Counter Test Block Design}
+					\label{fig:-03_hardware-hw2-target-png}
+				\end{figure}
+
+			\subsubsection{Structural Design(s)}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/hw2/rtl_schematic.png}
+					\caption{RTL Design of \texttt{PC\_TestBlock.sv}}
+					\label{fig:-03_hardware-hw2-rtl_schematic-png}
+				\end{figure}
+				
+			\subsubsection{Synthesis Warning(s)}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../03_hardware/hw2/errors.png}
+					\caption{Synthesis Errors of \texttt{PC\_TextBlock.sv}}
+					\label{fig:-03_hardware-hw2-errors-png}
+				\end{figure}
+
+				The only error with importance here is 'clk' having multiple
+				concurrent drivers such that one clock toggles clk and 
+				the other initially defines the clk value. I opted to proceed
+				with this error. 
+
+			\subsubsection{Verification}
+				All test cases passed in \texttt{PC\_TestBlock\_tb.sv} passed 
+				in simulation along with each subcomponent test bench.  
+	
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={Simulation file for \texttt{PC\_TestBlock.sv}},
+					breaklines=false,
+					label={fig:pc_tb}
+				]{../03_hardware/otter/sim/PC_TestBlock_tb.sv}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={Simulation file for \texttt{Mux\_6N.sv}},
+					breaklines=false,
+					label={fig:mux_tb}
+				]{../03_hardware/otter/sim/Mux_6N_tb.sv}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={Simulation file for \texttt{PC\_Reg.sv}},
+					breaklines=false,
+					label={fig:pcreg_tb}
+				]{../03_hardware/otter/sim/PC_Reg_tb.sv}
+
+			\subsubsection{SystemVerilog Code}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{PC\_TestBlock.sv}},
+					breaklines=false,
+					label={fig:pc}
+				]{../03_hardware/otter/src/PC_TestBlock.sv}
 
 
 	\newpage

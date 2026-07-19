@@ -14,5 +14,8 @@
 *.hw*
 *.ip_user_files*
 *.sim*
+*.src*
+*.sim*
+*.runs*
 
 # ~~~~ directories ~~~~

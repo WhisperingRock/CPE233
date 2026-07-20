@@ -672,6 +672,101 @@
 					\label{fig:}
 				\end{figure}
 
+		\subsection{SW3 - Loops}
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../02_software/sw3/assignment.png}
+				\caption{Questions to address}
+				\label{fig:-02_software-sw3-assignment-png}
+			\end{figure}
+
+			\subsubsection{Part 1}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../02_software/sw3/p1_photos/flow.png}
+					\caption{Flow chart for part 1}
+					\label{fig:-02_software-sw3-p1_photos-flow-png}
+				\end{figure}	
+
+				\begin{table}[h]
+					\centering
+					\label{tab:label}
+					\begin{tabular}{||c|c|c|c|c||}
+						\hline
+					\textbf{TC\#} & \textbf{Desc} & \textbf{Given MMIO[SWITCHES]} & \textbf{Correct MMIO[7SEG]} & \textbf{Result}\\ \hline
+						1 & Zero & $0x0000\_0000$ & $0x0000\_0000$ & Passed \\ \hline
+						2 & Zero + One & $0x0000\_0001$ & $0x0000\_0000$ & Passed \\ \hline
+						3 & One + Zero & $0x0001\_0000$ & $0x0000\_0000$ & Passed \\ \hline
+						4 & One + One & $0x0001\_0001$ & $0x0000\_0001$ & Passed \\ \hline
+						5 & num1 & $0x0013\_0004$ & $0x0000\_004C$ & Passed \\ \hline
+						6 & num1 reverse & $0x0004\_0013$ & $0x0000\_004C$ & Passed \\ \hline
+						7 & shift 1 & $0xFFFF\_FFFF$ & $0xFFFE\_0001$ & Passed \\ \hline
+						8 & shift 2& $0x0010\_FFFF$ & $0x000F\_FFF0$ & Passed \\ \hline
+						9 & shift 3 & $0x0100\_FFFF$ & $0x00FF\_FF00$ & Passed \\ \hline
+						\hline
+					\end{tabular}
+					\caption{Test cases for part 1}
+				\end{table}
+
+				\lstinputlisting[
+					language={[riscv]Assembler},
+					captionpos=top,
+					caption={sw3\_p1.asm},
+					breaklines=false]
+					{../02_software/sw3/sw3_p1.asm}
+
+			\subsubsection{Part 2}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../02_software/sw3/p2_photos/flow.png}
+					\caption{Flow chart for part 2}
+					\label{fig:-02_software-sw3-p2_photos-flow-png}
+				\end{figure}	
+
+				Consider the following calculations
+				\begin{align*}
+					12.5 \cdot 10^6 \text{ instr} &= 0.5s \cdot \frac{\text{instr}}{40ns} \cdot \frac{10^9 ns}{1 s}\\
+					&= \text{0x00BE\_BC20} \\
+				\end{align*}
+
+				\begin{itemize}
+					\item There are 13 instructions, after reading
+							from SWTICHES, that are only executed once.
+							Lets refer to these instructions as bias s.t.
+							$b = 13$.
+					\item There are 3 instruction in our delay loop s.t.
+							$m = 3$.
+				\end{itemize}
+
+				Now lets relate our instructions to the instruction layout
+				s.t. we identify how many times we actually need to loop.
+
+				\begin{align*}
+					3m + b &= 12.5 \cdot 10^9 \\
+					m &= \frac{12,500,000 - 13}{3} \\
+					&= 4,166,663 \\
+				\end{align*}
+
+				Rather than use this number in directly, I opted to write
+				the constant in terms of total instructions needed against
+				how many loops we need. 
+
+				\begin{align*}
+					\text{offset} &= 12.5 \cdot 10^9 - m \\
+					&= 8,333,337\\
+					&= \text{0x007F\_2819} \\
+				\end{align*}
+								
+				
+				\lstinputlisting[
+					language={[riscv]Assembler},
+					captionpos=top,
+					caption={Assembly code for sw3\_p2.asm},
+					label={code:sw3p2},
+					breaklines=false]
+					{../02_software/sw3/sw3_p2.asm}
 	\newpage
 	\section{Appendix}
 

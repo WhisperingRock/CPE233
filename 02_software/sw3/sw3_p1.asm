@@ -103,6 +103,8 @@ _start:
 #			a1 : 32-bit unsigned word
 # Temps :
 #			t0 :
+# Note  :
+#			- consumes a1
 # Return:	
 #			a0 : product of a0 * a1
 Multiply:

@@ -299,6 +299,68 @@
 					label={fig:pc}
 				]{../03_hardware/otter/src/PC_TestBlock.sv}
 
+		\subsection{HW3 - Register File}
+
+			\subsubsection{Intended Behavior(s)}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw3/target.png}
+					\caption{Top Level Register File}
+					\label{fig:-03_hardware-hw3-target-png}
+				\end{figure}
+
+				The RAM register file must \ldots
+				\begin{itemize}
+					\item store 32 32-bit registers
+					\item dual asynch fetch the values at ADR1 / ADR2 
+							and place them in RS1, RS2
+					\item single synch write W\_DATA to W\_ADR if EN is high.
+					\item prevent x0 "zero" register from being overwritten.
+				\end{itemize}
+
+			\subsubsection{Structural Design(s)}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/hw3/rtl_schematic.png}
+					\caption{RTL Design of \texttt{RegFile.sv}}
+					\label{fig:-03_hardware-hw3-rtl_schematic-png}
+				\end{figure}
+
+				Notice we only overwrite the W\_ADR if EN is high AND 
+				W\_ADR is not 0 (for x0).
+				
+			\subsubsection{Synthesis Warning(s)}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../03_hardware/hw3/errors.png}
+					\caption{Synthesis Errors of \texttt{RegFile.sv}}
+					\label{fig:-03_hardware-hw3-errors-png}
+				\end{figure}
+
+			\subsubsection{Verification}
+				All test cases passed in \texttt{RegFile\_tb.sv} passed 
+				in simulation along with each subcomponent test bench.  
+	
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={Verification Simulation file for \texttt{RegFile.sv}},
+					breaklines=false,
+					label={fig:rf_tb}
+				]{../03_hardware/otter/sim/RegFile_tb.sv}
+
+			\subsubsection{SystemVerilog Code}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{RegFile.sv}},
+					breaklines=false,
+					label={fig:rf}
+				]{../03_hardware/otter/src/RegFile.sv}
+
+
+
 
 	\newpage
 	\section{Software}

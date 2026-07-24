@@ -16,8 +16,21 @@ ARR:	.word -7:10
 
 # ~~~~ Test Cases ~~~~
 # ~~ TC1: worst bubble case ~~
-TC:		.word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
+#TC:		.word 10, 9, 8, 7, 6, 5, 4, 3, 2, 1
 # answer = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 
+# verified r/w and sort
+
+# ~~ TC2: negatives ~~
+#TC:		.word 1, -5, 2, 8, 3, 3, -1000, 1000, 0, 10
+# answer = -1000, -5, 0, 1, 2, 3, 3, 8, 10, 1000
+# verified r/w and sort
+
+# ~~ TC3: mirror ~~
+TC:		.word 0x7FFFFFFF:4
+		.word 0
+		.word 0xEFFFFFFF:5
+# answer = 0xEFFFFFFF:5 , 0x7FFFFFFF:4
+# verified r/w and sort
 
 .global _start
 
@@ -53,9 +66,9 @@ _start:
 	# ~~ 2. caller(_start) stores reg values on stack ~~
 	# ~~ 3. caller(_start) function execution ~~
 	# ~ sort array ~~
-#	addi a0, s0, 0				# a0 is the base addr for ARR
-#	addi a1, s1, 0				# a1 is the num of elem in ARR
-#	jal BUBBLESORT
+	addi a0, s0, 0				# a0 is the base addr for ARR
+	addi a1, s1, 0				# a1 is the num of elem in ARR
+	jal BubbleSort 
 	# ~~ 4. caller(_start) restores preserved from stack ~~
 	# ~~ 5. caller(_start) deallocates space on stack ~~
 
@@ -79,7 +92,7 @@ _start:
 	ecall				# execute sys call
 
 
-# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# ~~~~~~~~~~~~~~~~ReadOrWrite()~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Purpose : Read from from the MMIO address n times and place into array
 #			or write the contents of array onto MMIO addr conseq n times.
 #			
@@ -161,5 +174,84 @@ End_For_ROW:
 	addi sp, sp, 20
 
 	# ~~ calle(READORWRITE) return ~~
+	jr ra
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~BubbleSort()~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Purpose : Sort array in ascending order 
+#			
+#
+# Input :
+#			a0 : [unsigned 32-bit] base address of array
+#			a1 : [unsigned 32-bit] num elem in array
+#
+# Note :
+#			
+# Return:	
+#			
+
+BubbleSort:
+	
+	# ~~~~ calle(BubbleSort) saves preserved ~~~~
+	# ~~ 1. calle(BubbleSort) allocates space on stack ~~
+	addi sp, sp, -20
+
+	# ~~ 2. calle(BubbleSort) stores reg values on stack ~~
+	sw s3, 16(sp)
+	sw s2, 12(sp)
+	sw s1, 8(sp)
+	sw s0, 4(sp)
+	sw ra, 0(sp)
+
+	# ~~ 3. calle(BubbleSort) function execution ~~
+
+	slli a1, a1, 2					# shift s.t. we dont use reg for i and 4i
+	
+	# ~ init vars ~
+	addi t0, zero, 0				# t0 = i = 0 (4i)
+	addi t1, a1, -4					# t1 = n - 1
+									# t2 = j = 0
+									# t3 = n - 1 - i
+									# t4 = arr + j
+									# t5, t6 = dummy
+
+For_i_Bubble: # for(int i = 0; i < n-1; i++)
+	bgeu t0, t1, End_For_i_Bubble
+
+
+	addi t2, zero, 0				# j = 0
+	sub t3, t1, t0					# n - 1 - i
+For_j_Bubble: # for(int j = 0; j < n-1-i; j++)
+	bgeu t2, t3, End_For_j_Bubble
+	
+	add t4, a0, t2					# t4 = arr + j
+	lw t5, 0(t4)					# t5 = *(arr + j)
+	lw t6, 4(t4)					# t6 = *(arr + j + 1)
+
+	# if(t6 < t5)
+	bgt t6, t5, NoSwap
+	sw t6, 0(t4)					# arr[j] = t6
+	sw t5, 4(t4)					# arr[j+1] = t5	
+NoSwap: 
+
+	addi t2, t2, 4					# j++
+	j For_j_Bubble
+End_For_j_Bubble:
+
+	addi t0, t0, 4					# i++
+	j For_i_Bubble
+End_For_i_Bubble:
+	
+	# ~~ 4. calle(BubbleSort) restores preserved from stack ~~
+	lw s3, 16(sp)
+	lw s2, 12(sp)
+	lw s1, 8(sp)
+	lw s0, 4(sp)
+	lw ra, 0(sp)
+
+	# ~~ 5. calle(BubbleSort) deallocates space on stack ~~
+	addi sp, sp, 20
+
+	# ~~ calle(BubbleSort) return ~~
 	jr ra
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

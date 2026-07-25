@@ -13,7 +13,7 @@
 \usepackage{color}
 \usepackage{bm}
 \usepackage{listings}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{enumitem}
 %\usepackage{xfrac}
 \usepackage[normalem]{ulem}
@@ -359,7 +359,87 @@
 					label={fig:rf}
 				]{../03_hardware/otter/src/RegFile.sv}
 
+		\subsection{HW4 - ALU + ImmGen}
 
+			\subsubsection{Intended Behavior(s)}
+				
+			\subsubsection{Structural Design(s)}
+								
+			\subsubsection{Synthesis Warning(s)}
+				
+			\subsubsection{Verification}
+
+				\textbf{ALU}
+
+				\rowcolors[\hline]{2}{lightgray!50}{lightgray!50}
+				\begin{table}[H]
+					\centering
+					\begin{tabular}{||c|c|l|l|l||}
+						\hline
+						\textbf{Function} & \textbf{ALU\_FUN}  & \textbf{Arg A} & \textbf{Arg B} & \textbf{Expected Result} \\\hline
+						ADD & 0x0000 & 0xA50F\_96C3  & 0x5AF0\_693C & 0xFFFF\_FFFF  \\\hline
+							&  		 & 0x8410\_5F21  & 0x7B10\_5FDE & 0xFF20\_BEFF  \\\hline
+							&  		 & 0xFFFF\_FFFF  & 0x0000\_0001 & 0x0000\_0000  \\\hline
+
+						\hiderowcolors
+						SUB & 0x1000 & 0x0000\_0000  & 0x0000\_0001 & 0xFFFF\_FFFF  \\\hline
+							&  		 & 0xAA80\_6355  & 0x5501\_62AA & 0x557F\_00AB  \\\hline
+							&  		 & 0x5501\_62AA  & 0xAA80\_6355 & 0xAA80\_FF55  \\\hline
+
+						\showrowcolors
+						AND & 0x0111 & 0xA55A\_00FF  & 0x5A5A\_FFFF & 0x005A\_00AA  \\\hline
+							&  		 & 0xC3C3\_F966  & 0xFF66\_9F5A & 0xC342\_9942  \\\hline
+
+						\hiderowcolors
+						 OR & 0x0110 & 0x9A9A\_C300  & 0x65A3\_CC0F & 0xFFBB\_CF0F  \\\hline
+						 	& 		 & 0xC3C3\_F966  & 0xFF66\_9F5A & 0xFFE7\_FF7E  \\\hline
+
+						\showrowcolors
+						XOR & 0x0100 & 0xAA55\_00FF  & 0x5AA5\_0FF0 & 0xF0F0\_0F0F  \\\hline
+							& 		 & 0xA5A5\_6C6C  & 0xFF00\_C6FF & 0x5AA5\_AA93  \\\hline
+
+						\hiderowcolors
+						SRL & 0x0101 & 0x805A\_6CF3  & 0x0000\_0010 & 0x0000\_805A  \\\hline
+							&		 & 0x705A\_6CF3  & 0x0000\_0005 & 0x0382\_D367  \\\hline
+							&  		 & 0x805A\_6CF3  & 0x0000\_0000 & 0x805A\_6CF3  \\\hline
+							&		 & 0x805A\_6CF3  & 0x0000\_0100 & 0x805A\_6CF3  \\\hline
+
+						\showrowcolors
+						SLL & 0x0001 & 0x805A\_6CF3  & 0x0000\_0010 & 0x6CF3\_0000  \\\hline
+							&  		 & 0x805A\_6CF3  & 0x0000\_0005 & 0x0B4D\_9E60  \\\hline
+							&		 & 0x805A\_6CF3  & 0x0000\_0100 & 0x805A\_6CF3  \\\hline
+
+						\hiderowcolors
+						SRA & 0x1101 & 0x805A\_6CF3  & 0x0000\_0010 & 0xFFFF\_805A  \\\hline
+							&		 & 0x705A\_6CF3  & 0x0000\_0005 & 0x0382\_D367  \\\hline
+							&  		 & 0x805A\_6CF3  & 0x0000\_0000 & 0x805A\_6CF3  \\\hline
+							&		 & 0x805A\_6CF3  & 0x0000\_0100 & 0x805A\_6CF3  \\\hline
+
+						\showrowcolors
+						SLT & 0x0010 & 0x7FFF\_FFFF  & 0x8000\_0000 & 0x0000\_0000  \\\hline
+							&		 & 0x8000\_0000  & 0x0000\_0001 & 0x0000\_0001  \\\hline
+							&  		 & 0x0000\_0000  & 0x0000\_0000 & 0x0000\_0000  \\\hline
+							&		 & 0x5555\_5555  & 0x5555\_5555 & 0x0000\_0000  \\\hline
+
+						\hiderowcolors
+						SLTU& 0x0011 & 0x7FFF\_FFFF  & 0x8000\_0000 & 0x0000\_0001  \\\hline
+							&		 & 0x8000\_0000  & 0x0000\_0001 & 0x0000\_0000  \\\hline
+							&  		 & 0x0000\_0000  & 0x0000\_0000 & 0x0000\_0000  \\\hline
+							&		 & 0x55AA\_55AA  & 0x55AA\_55AA & 0x0000\_0000  \\\hline
+					
+						\showrowcolors
+						LUI COPY (MV?) & 0x1001 & 0x0123\_4567  & 0x7654\_3210 & 0x0123\_4567 \\\hline
+							&		 & 0xFEDC\_BA98  & 0x89AB\_CDEF &  0x8000\_0000 \\\hline
+
+
+					\end{tabular}
+					\label{tab:ALU-verify}
+					\caption{ALU Required Test Cases for Verification}
+				\end{table}
+				
+			\subsubsection{SystemVerilog Code}
+
+				
 
 
 	\newpage

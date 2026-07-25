@@ -24,8 +24,10 @@ module ALU_tb();
 
     // ~~~~ init local vars ~~~~
     logic[4:0] sel;
-    logic[31:0] a, b, testcase;
+    logic[31:0] a, b;
     logic[31:0] result;
+    
+    logic[31:0] testcase;   // testing var
     
     // ~~~~ instances ~~~~
     ALU UUT

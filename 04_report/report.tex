@@ -13,7 +13,7 @@
 \usepackage{color}
 \usepackage{bm}
 \usepackage{listings}
-\usepackage{xcolor}
+\usepackage[table]{xcolor}
 \usepackage{enumitem}
 %\usepackage{xfrac}
 \usepackage[normalem]{ulem}
@@ -229,7 +229,7 @@
 				table \ref{tab:hw_a1_reverseTable}
 		
 
-
+		\newpage
 		\subsection{HW2 - Program Counter}
 
 			\subsubsection{Intended Behavior(s)}
@@ -299,6 +299,7 @@
 					label={fig:pc}
 				]{../03_hardware/otter/src/PC_TestBlock.sv}
 
+		\newpage
 		\subsection{HW3 - Register File}
 
 			\subsubsection{Intended Behavior(s)}
@@ -359,7 +360,160 @@
 					label={fig:rf}
 				]{../03_hardware/otter/src/RegFile.sv}
 
+		\newpage
+		\subsection{HW4 - ALU + ImmGen}
 
+			\subsubsection{ALU}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.5\textwidth]{../03_hardware/hw4/target_alu.png}
+					\caption{Top Level ALU}
+					\label{fig:-03_hardware-hw4-target_alu-png}
+				\end{figure}
+
+				The ALU is designed to perform the arithmetic and logic
+				operations required by the RISC-V CPU. Note the 11 
+				we implemented here. 
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw4/design_alu.png}
+					\caption{Instruction Operations of the ALU}
+					\label{fig:-03_hardware-hw4-design_alu-png}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/hw4/rtl_schematic_alu.png}
+					\caption{RTL Design of the ALU}
+					\label{fig:-03_hardware-hw4-design_alu-png}
+				\end{figure}
+
+
+				\rowcolors{2}{lightgray!50}{lightgray!50}
+				\begin{table}[H]
+					\centering
+					\begin{tabular}{||c|c|l|l|l||}
+						\hline
+						\textbf{Function} & \textbf{ALU\_FUN}  & \textbf{Arg A} & \textbf{Arg B} & \textbf{Expected Result} \\\hline
+						ADD & 0x0000 & 0xA50F\_96C3  & 0x5AF0\_693C & 0xFFFF\_FFFF  \\\hline
+							&  		 & 0x8410\_5F21  & 0x7B10\_5FDE & 0xFF20\_BEFF  \\\hline
+							&  		 & 0xFFFF\_FFFF  & 0x0000\_0001 & 0x0000\_0000  \\\hline
+
+						\hiderowcolors
+						SUB & 0x1000 & 0x0000\_0000  & 0x0000\_0001 & 0xFFFF\_FFFF  \\\hline
+							&  		 & 0xAA80\_6355  & 0x5501\_62AA & 0x557F\_00AB  \\\hline
+							&  		 & 0x5501\_62AA  & 0xAA80\_6355 & 0xAA80\_FF55  \\\hline
+
+						\showrowcolors
+						AND & 0x0111 & 0xA55A\_00FF  & 0x5A5A\_FFFF & 0x005A\_00FF  \\\hline
+							&  		 & 0xC3C3\_F966  & 0xFF66\_9F5A & 0xC342\_9942  \\\hline
+
+						\hiderowcolors
+						 OR & 0x0110 & 0x9A9A\_C300  & 0x65A3\_CC0F & 0xFFBB\_CF0F  \\\hline
+						 	& 		 & 0xC3C3\_F966  & 0xFF66\_9F5A & 0xFFE7\_FF7E  \\\hline
+
+						\showrowcolors
+						XOR & 0x0100 & 0xAA55\_00FF  & 0x5AA5\_0FF0 & 0xF0F0\_0F0F  \\\hline
+							& 		 & 0xA5A5\_6C6C  & 0xFF00\_C6FF & 0x5AA5\_AA93  \\\hline
+
+						\hiderowcolors
+						SRL & 0x0101 & 0x805A\_6CF3  & 0x0000\_0010 & 0x0000\_805A  \\\hline
+							&		 & 0x705A\_6CF3  & 0x0000\_0005 & 0x0382\_D367  \\\hline
+							&  		 & 0x805A\_6CF3  & 0x0000\_0000 & 0x805A\_6CF3  \\\hline
+							&		 & 0x805A\_6CF3  & 0x0000\_0100 & 0x805A\_6CF3  \\\hline
+
+						\showrowcolors
+						SLL & 0x0001 & 0x805A\_6CF3  & 0x0000\_0010 & 0x6CF3\_0000  \\\hline
+							&  		 & 0x805A\_6CF3  & 0x0000\_0005 & 0x0B4D\_9E60  \\\hline
+							&		 & 0x805A\_6CF3  & 0x0000\_0100 & 0x805A\_6CF3  \\\hline
+
+						\hiderowcolors
+						SRA & 0x1101 & 0x805A\_6CF3  & 0x0000\_0010 & 0xFFFF\_805A  \\\hline
+							&		 & 0x705A\_6CF3  & 0x0000\_0005 & 0x0382\_D367  \\\hline
+							&  		 & 0x805A\_6CF3  & 0x0000\_0000 & 0x805A\_6CF3  \\\hline
+							&		 & 0x805A\_6CF3  & 0x0000\_0100 & 0x805A\_6CF3  \\\hline
+
+						\showrowcolors
+						SLT & 0x0010 & 0x7FFF\_FFFF  & 0x8000\_0000 & 0x0000\_0000  \\\hline
+							&		 & 0x8000\_0000  & 0x0000\_0001 & 0x0000\_0001  \\\hline
+							&  		 & 0x0000\_0000  & 0x0000\_0000 & 0x0000\_0000  \\\hline
+							&		 & 0x5555\_5555  & 0x5555\_5555 & 0x0000\_0000  \\\hline
+
+						\hiderowcolors
+						SLTU& 0x0011 & 0x7FFF\_FFFF  & 0x8000\_0000 & 0x0000\_0001  \\\hline
+							&		 & 0x8000\_0000  & 0x0000\_0001 & 0x0000\_0000  \\\hline
+							&  		 & 0x0000\_0000  & 0x0000\_0000 & 0x0000\_0000  \\\hline
+							&		 & 0x55AA\_55AA  & 0x55AA\_55AA & 0x0000\_0000  \\\hline
+					
+						\showrowcolors
+						LUI COPY (MV?) & 0x1001 & 0x0123\_4567  & 0x7654\_3210 & 0x0123\_4567 \\\hline
+							&		 & 0xFEDC\_BA98  & 0x89AB\_CDEF &  0xFEDC\_BA98 \\\hline
+
+						\hiderowcolors
+					\end{tabular}
+					\label{tab:ALU-verify}
+					\caption{ALU Required Test Cases for Verification}
+				\end{table}
+				
+				
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={Verification testing for ALU: \texttt{ALU\_tb.sv}},
+					breaklines=false,
+					label={fig:rf}
+				]{../03_hardware/otter/sim/ALU_tb.sv}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{ALU.sv}},
+					breaklines=false,
+					label={fig:rf}
+				]{../03_hardware/otter/src/ALU.sv}
+
+			\subsubsection{Immediate Generator}
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.5\textwidth]{../03_hardware/hw4/target_immed.png}
+					\caption{Top Level ImmedGen}
+					\label{fig:-03_hardware-hw4-target_gen-png}
+				\end{figure}
+
+				The Immediate Generator is a feed though bit parser for
+				different assembly instructions, continuously outputting
+				all types per instruction.
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../03_hardware/hw4/design_immed.png}
+					\caption{Instruction types of the Immediate Generator}
+					\label{fig:-03_hardware-hw4-design_immed-png}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw4/rtl_schematic_immed.png}
+					\caption{RTL Design of the ImmedGen}
+					\label{fig:-03_hardware-hw4-design_immed-png}
+				\end{figure}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={Verification testing for ImmedGen: \texttt{ImmedGen\_tb.sv}},
+					breaklines=false,
+					label={fig:rf}
+				]{../03_hardware/otter/sim/ImmedGen_tb.sv}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{ImmedGen.sv}},
+					breaklines=false,
+					label={fig:rf}
+				]{../03_hardware/otter/src/ImmedGen.sv}
 
 
 	\newpage
@@ -654,6 +808,7 @@
 									caption={Question 2 of SW1},
 									breaklines=false]{../02_software/sw1/sw1_2.asm}
 
+		\newpage
 		\subsection{SW2 - Conditional Statements}
 			\begin{figure}[H]
 				\centering
@@ -734,6 +889,7 @@
 					\label{fig:}
 				\end{figure}
 
+		\newpage
 		\subsection{SW3 - Loops}
 			\begin{figure}[H]
 				\centering
@@ -831,6 +987,7 @@
 					{../02_software/sw3/sw3_p2.asm}
 
 
+		\newpage
 		\subsection{SW4 - Arrays}
 			\begin{figure}[H]
 				\centering

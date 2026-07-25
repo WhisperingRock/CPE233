@@ -40,8 +40,8 @@
 
 # ~~~~ AND ~~~~
 #A:	.word 0xA55A00FF
-#B:	.word 0x5A5A62AA
-# answer = 0x005A_00AA
+#B:	.word 0x5A5A62FF
+# answer = 0x005A_00FF
 
 #A:	.word 0xC3C3F966
 #B:	.word 0xFF669F5A
@@ -159,9 +159,9 @@
 #B:	.word 0x76543210
 # answer = 0x0123_4567
 
-A:	.word 0x80000000
-B:	.word 0x00000001
-# answer = 0x8000_0000
+A:	.word 0xFEDCBA98
+B:	.word 0x89ABCDEF
+# answer = 0xFEDC_BA98
 
 .global _start
 

@@ -526,11 +526,17 @@
 				such that they are not on the stack but rather beyond 
 				what could be the heap (if we implement one). 
 
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.3\textwidth]{../03_hardware/hw5/mem_map.png}
+					\caption{Memory Map for OTTER}
+					\label{fig:-03_hardware-hw5-mem-map-png}
+				\end{figure}
 
 				\begin{figure}[H]
 					\centering
 					\includegraphics[width=\textwidth]{../03_hardware/hw5/mem_flow.png}
-					\caption{Flow Diagram for Memory}
+					\caption{\textbf{ROUGH} Flow Diagram for Memory}
 					\label{fig:-03_hardware-hw5-memory_flow-png}
 				\end{figure}
 
@@ -565,6 +571,78 @@
 					\caption{Lint RTL Schematic of Memory}
 					\label{fig:-03_hardware-hw5-rtl_mem-png}
 				\end{figure}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{Memory.sv}},
+					breaklines=false,
+					label={fig:memory}
+				]{../03_hardware/otter/src/otter_memory_v1_07.sv}
+
+
+			\subsubsection{Branch Condition Generator}
+		
+				The BCG compares two register values and generates a command
+				signal for equality, less than (signed), and less than (unsigned).
+				This is needed to perform the logic evaluations of the differing
+				branch types s.a. beq, bltu, \ldots
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw5/rtl_schematic_BCG.png}
+					\caption{Lint RTL Schematic of BCG}
+					\label{fig:-03_hardware-hw5-rtl_bcg-png}
+				\end{figure}
+
+		
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{BranchConditionGen.sv}},
+					breaklines=false,
+					label={fig:BCG}
+				]{../03_hardware/otter/src/BranchConditionGen.sv}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{BranchConditionGen\_tb.sv}},
+					breaklines=false,
+					label={fig:BCGtb}
+				]{../03_hardware/otter/sim/BranchConditionGen_tb.sv}
+
+			\subsubsection{Branch Address Generator}
+		
+				The BAG is used to modify the program counter! We want
+				this module s.t. we can jump (J-Type), branch (B-Type), 
+				and jump-return (using I-Type). These instructions are
+				useful for control flow. 
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw5/rtl_schematic_BAG.png}
+					\caption{Lint RTL Schematic of BAG}
+					\label{fig:-03_hardware-hw5-rtl_bag-png}
+				\end{figure}
+
+		
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{BranchAddrGen.sv}},
+					breaklines=false,
+					label={fig:BAG}
+				]{../03_hardware/otter/src/BranchAddrGen.sv}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{BranchAddrGen\_tb.sv}},
+					breaklines=false,
+					label={fig:BAGtb}
+				]{../03_hardware/otter/sim/BranchAddrGen_tb.sv}
+
 
 	\newpage
 	\section{Software}

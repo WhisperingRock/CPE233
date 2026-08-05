@@ -515,6 +515,134 @@
 					label={fig:rf}
 				]{../03_hardware/otter/src/ImmedGen.sv}
 
+		\newpage
+		\subsection{HW5 - Real Memory and Branch}
+
+			\subsubsection{Memory}
+
+				The memory segment is designed to dual synch output an instruction
+				and a data value with architecture for pulling data from the 
+				MMIO addresses. They are on separate addresses physically 
+				such that they are not on the stack but rather beyond 
+				what could be the heap (if we implement one). 
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.3\textwidth]{../03_hardware/hw5/mem_map.png}
+					\caption{Memory Map for OTTER}
+					\label{fig:-03_hardware-hw5-mem-map-png}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/hw5/mem_flow.png}
+					\caption{\textbf{ROUGH} Flow Diagram for Memory}
+					\label{fig:-03_hardware-hw5-memory_flow-png}
+				\end{figure}
+
+				\rowcolors{2}{white!50}{lightgray!50}
+				\begin{table}[H]
+					\centering
+					\label{tab:memory}
+					\begin{tabular}{|l|c|c|}
+						\hline
+						\textbf{Signal} & \textbf{Size(bits)} & \textbf{Purpose} \\ \hline
+						\showrowcolors
+						MEM\_CLK	& 1		& Required for synchronous logic \\\hline
+						MEM\_RDEN1	& 1		& Request an instr read at ADDR1, to register, to DOUT1 \\\hline
+						MEM\_RDEN2	& 1 	& Request a value read at ADDR2 with path to update DOUT2 (but not entire path)\\\hline
+						MEM\_WE2	& 1		& Request DIN2 overwrite register connected to DOUT | wire to IO\_WR \\\hline
+						MEM\_ADDR1	& 14	& Instruction address \\\hline
+						MEM\_ADDR2	& 32	& Data Address \\\hline
+						MEM\_DIN2	& 32	& Data value to overwrite one at ADDR2\\\hline
+						MEM\_SIZE	& 2		& Indicate (Byte, Half, Word) size of data going to ADDR2\\\hline
+						MEM\_SIGN	& 1		& Indicate (signed, unsigned) data going to ADDR2\\\hline
+						IO\_IN		& 32	& Incoming data from IO\\\hline
+						IO\_WR		& 1		& Feedthrough of MEM\_WE2 if ADDR2 is in MMIO range\\\hline
+						MEM\_DOUT1	& 32	& Instr1 output \\\hline
+						MEM\_DOUT2	& 32	& Data2 output \\\hline
+					\end{tabular}
+					\caption{Memory Module Signals}
+				\end{table}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/hw5/rtl_schematic_mem.png}
+					\caption{Lint RTL Schematic of Memory}
+					\label{fig:-03_hardware-hw5-rtl_mem-png}
+				\end{figure}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{Memory.sv}},
+					breaklines=false,
+					label={fig:memory}
+				]{../03_hardware/otter/src/otter_memory_v1_07.sv}
+
+
+			\subsubsection{Branch Condition Generator}
+		
+				The BCG compares two register values and generates a command
+				signal for equality, less than (signed), and less than (unsigned).
+				This is needed to perform the logic evaluations of the differing
+				branch types s.a. beq, bltu, \ldots
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw5/rtl_schematic_BCG.png}
+					\caption{Lint RTL Schematic of BCG}
+					\label{fig:-03_hardware-hw5-rtl_bcg-png}
+				\end{figure}
+
+		
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{BranchConditionGen.sv}},
+					breaklines=false,
+					label={fig:BCG}
+				]{../03_hardware/otter/src/BranchConditionGen.sv}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{BranchConditionGen\_tb.sv}},
+					breaklines=false,
+					label={fig:BCGtb}
+				]{../03_hardware/otter/sim/BranchConditionGen_tb.sv}
+
+			\subsubsection{Branch Address Generator}
+		
+				The BAG is used to modify the program counter! We want
+				this module s.t. we can jump (J-Type), branch (B-Type), 
+				and jump-return (using I-Type). These instructions are
+				useful for control flow. 
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw5/rtl_schematic_BAG.png}
+					\caption{Lint RTL Schematic of BAG}
+					\label{fig:-03_hardware-hw5-rtl_bag-png}
+				\end{figure}
+
+		
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{BranchAddrGen.sv}},
+					breaklines=false,
+					label={fig:BAG}
+				]{../03_hardware/otter/src/BranchAddrGen.sv}
+
+				\lstinputlisting[
+					language={Verilog},
+					captionpos=top,
+					caption={\texttt{BranchAddrGen\_tb.sv}},
+					breaklines=false,
+					label={fig:BAGtb}
+				]{../03_hardware/otter/sim/BranchAddrGen_tb.sv}
+
 
 	\newpage
 	\section{Software}

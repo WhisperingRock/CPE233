@@ -84,7 +84,7 @@ module Memory_tb();
         testcase = 1;
         #5;
         $display("TC%d:", testcase);
-        assert() else $error("");
+        //assert() else $error("");
     
     end
     

@@ -64,7 +64,7 @@ module RegFile(
     // ~~~~ synch write ~~~~
     always_ff@(posedge CLK)         // changes on clk demand sequental logic (use nonblocking)
     begin
-        if(EN & W_ADR != 0)
+        if((EN == 1'b1) && (W_ADR != 5'b00000))
         begin 
             ram[W_ADR] <= W_DATA;
         end

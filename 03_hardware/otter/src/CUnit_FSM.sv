@@ -36,25 +36,28 @@ module CUnit_FSM(
     
     
     // ~~~~ local vars ~~~~
-    typedef enum {INIT, FETCH, EXEC, WRITEBACK, R} e_state;
+    typedef enum {INIT, FETCH, EXEC, WRITEBACK} e_state;
     e_state curr_state, next_state;
     
     typedef enum{LOAD, LOAD_BAR, ERR}           e_lsignal;
     e_lsignal signal;
 
+    logic start; 
  
     // ~~~~ initial conditions ~~~~
     initial
     begin
-        next_state      = INIT;
-        curr_state      = R;  
-        signal          = LOAD;
+        start  = 1'b1;   
+        signal = LOAD;
     end
     
     // ~~~~ state engine ~~~~
     always_ff @(posedge CLK or posedge RST) begin
-        if(RST == 1'b1) begin   curr_state <= INIT; end
-        else begin              curr_state <= next_state; end
+        if(RST == 1'b1 || start == 1'b1) begin
+            curr_state  <= INIT; 
+            start       <= 1'b0; 
+        end
+        else begin curr_state <= next_state; end
     end
 
 

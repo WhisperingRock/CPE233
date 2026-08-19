@@ -79,6 +79,7 @@ module Memory (
 		//$readmemh("tc10x10.mem", memory, 0, 16383);
 		//$readmemh("tc16x16.mem", memory, 0, 16383);
 		//$readmemh("Test_All.mem", memory, 0, 16383);
+		$readmemh("otter_hw6sample_test.mem", memory, 0, 16383);
 	end
     
 	// ~~~~ todo ~~~~

@@ -36,28 +36,31 @@ module CUnit_FSM(
     
     
     // ~~~~ local vars ~~~~
-    typedef enum {INIT, FETCH, EXEC, WRITEBACK} e_state;
+    typedef enum logic [1:0] {INIT, FETCH, EXEC, WRITEBACK} e_state;
     e_state curr_state, next_state;
     
-    typedef enum{LOAD, LOAD_BAR, ERR}           e_lsignal;
-    e_lsignal signal;
+    typedef enum logic {LOAD, LOAD_BAR}                     e_lsignal;
+    e_lsignal curr_signal, next_signal;
 
     logic start; 
  
     // ~~~~ initial conditions ~~~~
     initial
     begin
-        start  = 1'b1;   
-        signal = LOAD;
+        start       = 1'b1;
     end
     
     // ~~~~ state engine ~~~~
     always_ff @(posedge CLK or posedge RST) begin
         if(RST == 1'b1 || start == 1'b1) begin
-            curr_state  <= INIT; 
+            curr_state      <= INIT;
+            curr_signal     <= LOAD; 
             start       <= 1'b0; 
         end
-        else begin curr_state <= next_state; end
+        else begin 
+            curr_state  <= next_state;
+            curr_signal <= next_signal; 
+        end
     end
 
 
@@ -77,7 +80,8 @@ module CUnit_FSM(
                 MEM_RDEN1   = 1'b0;            // Dont read current instr
                 MEM_RDEN2   = 1'b0;
                 
-                next_state = FETCH; 
+                next_state  = FETCH;
+                next_signal = LOAD; 
             end
            
            
@@ -91,14 +95,16 @@ module CUnit_FSM(
                 MEM_WE2     = 1'b0;
                 
                 // ~~ Repeat FETCH in extra cycle ~~
-                if(signal == LOAD_BAR) begin
+                if(curr_signal == LOAD_BAR) begin
                     MEM_RDEN1   = 1'b0;
                     MEM_RDEN2   = 1'b1;
+                    next_signal = LOAD_BAR;
                 end
                 // ~~ else, standard FETCH cycle ~~
                 else begin
                     MEM_RDEN1   = 1'b1;
                     MEM_RDEN2   = 1'b0;
+                    next_signal = LOAD;
                 end
                 
                 next_state = EXEC;
@@ -117,25 +123,20 @@ module CUnit_FSM(
                 MEM_RDEN2   = 1'b0;
                 
                 if(OPCODE == 7'b000_0011) begin         // load needs an extra cycle
-                    if(signal == LOAD) begin
-                        signal = LOAD_BAR;
-                        next_state = FETCH; 
-                    end
-                    
-                    else if(signal == LOAD_BAR) begin
-                        signal = LOAD;
-                        next_state = WRITEBACK; 
+                    if(curr_signal == LOAD) begin
+                        next_signal = LOAD_BAR;
+                        next_state  = FETCH; 
                     end
                     
                     else begin
-                        signal = ERR;
-                        next_state = INIT;
+                        next_signal = LOAD;
+                        next_state  = WRITEBACK; 
                     end
                 end
                 
                 else begin
-                    signal      = LOAD; 
-                    next_state  = WRITEBACK;
+                    next_signal     = LOAD; 
+                    next_state      = WRITEBACK;
                 end 
             end
            
@@ -168,6 +169,7 @@ module CUnit_FSM(
                 MEM_RDEN2   = 1'b0;
                 
                 next_state = FETCH;
+                next_signal= LOAD;
                 
             end
         endcase

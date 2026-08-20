@@ -108,7 +108,7 @@ module RegFile_tb();
         addr1 = 14; addr2 = 14; w_addr = 14;
         enable = 1; 
         #10;
-        for(int i = 0; i < 100; i++)
+        for(int i = 0; i < 500; i++)
         begin
             w_val = $random();
             #10;

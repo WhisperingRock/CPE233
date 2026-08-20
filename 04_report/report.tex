@@ -18,7 +18,6 @@
 %\usepackage{xfrac}
 \usepackage[normalem]{ulem}
 \usepackage{subcaption}
-
 \usepackage[colorlinks=true, linkcolor=blue]{hyperref}
 
 \usepackage{tikz}
@@ -98,6 +97,7 @@
 
 \begin{document}
     \maketitle
+	\addcontentsline{toc}{section}{Contents}
 	\tableofcontents
 	\newpage
 
@@ -273,21 +273,10 @@
 					label={fig:pc_tb}
 				]{../03_hardware/otter/sim/PC_TestBlock_tb.sv}
 
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={Simulation file for \texttt{Mux\_6N.sv}},
-					breaklines=false,
-					label={fig:mux_tb}
-				]{../03_hardware/otter/sim/Mux_6N_tb.sv}
+				For the 6 Input Mux, see \ref{otter:mux6}
 
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={Simulation file for \texttt{PC\_Reg.sv}},
-					breaklines=false,
-					label={fig:pcreg_tb}
-				]{../03_hardware/otter/sim/PC_Reg_tb.sv}
+				For the Program Counter register and test file, see
+				\ref{otter:pc} and \ref{ottertest:pc}.
 
 			\subsubsection{SystemVerilog Code}
 
@@ -297,6 +286,7 @@
 					caption={\texttt{PC\_TestBlock.sv}},
 					breaklines=false,
 					label={fig:pc}
+					cite={otter:pc-reg}
 				]{../03_hardware/otter/src/PC_TestBlock.sv}
 
 		\newpage
@@ -339,26 +329,12 @@
 				\end{figure}
 
 			\subsubsection{Verification}
-				All test cases passed in \texttt{RegFile\_tb.sv} passed 
+				All test cases passed in \texttt{RegFile\_tb.sv} \ref{ottertest:regfile} passed 
 				in simulation along with each subcomponent test bench.  
 	
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={Verification Simulation file for \texttt{RegFile.sv}},
-					breaklines=false,
-					label={fig:rf_tb}
-				]{../03_hardware/otter/sim/RegFile_tb.sv}
-
 			\subsubsection{SystemVerilog Code}
 
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={\texttt{RegFile.sv}},
-					breaklines=false,
-					label={fig:rf}
-				]{../03_hardware/otter/src/RegFile.sv}
+				See \ref{otter:regfile} for the \texttt{RegFile.sv}.
 
 		\newpage
 		\subsection{HW4 - ALU + ImmGen}
@@ -456,22 +432,9 @@
 					\caption{ALU Required Test Cases for Verification}
 				\end{table}
 				
-				
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={Verification testing for ALU: \texttt{ALU\_tb.sv}},
-					breaklines=false,
-					label={fig:rf}
-				]{../03_hardware/otter/sim/ALU_tb.sv}
+				See \texttt{ALU.sv} \ref{otter:alu} and \texttt{ALU\_tb.sv} \ref{ottertest:alu}
+				for passing simulation test cases from table \ref{tab:ALU-verify}.
 
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={\texttt{ALU.sv}},
-					breaklines=false,
-					label={fig:rf}
-				]{../03_hardware/otter/src/ALU.sv}
 
 			\subsubsection{Immediate Generator}
 				\begin{figure}[H]
@@ -499,21 +462,8 @@
 					\label{fig:-03_hardware-hw4-design_immed-png}
 				\end{figure}
 
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={Verification testing for ImmedGen: \texttt{ImmedGen\_tb.sv}},
-					breaklines=false,
-					label={fig:rf}
-				]{../03_hardware/otter/sim/ImmedGen_tb.sv}
-
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={\texttt{ImmedGen.sv}},
-					breaklines=false,
-					label={fig:rf}
-				]{../03_hardware/otter/src/ImmedGen.sv}
+				See \texttt{ImmedGen.sv} \ref{otter:immgen} and \texttt{ImmedGen\_tb.sv} 
+				\ref{ottertest:immgen} for passing simulation test cases
 
 		\newpage
 		\subsection{HW5 - Real Memory and Branch}
@@ -572,14 +522,7 @@
 					\label{fig:-03_hardware-hw5-rtl_mem-png}
 				\end{figure}
 
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={\texttt{Memory.sv}},
-					breaklines=false,
-					label={fig:memory}
-				]{../03_hardware/otter/src/otter_memory_v1_07.sv}
-
+				See \texttt{otter\_memory\_v1\_07.sv} \ref{otter:memory}.
 
 			\subsubsection{Branch Condition Generator}
 		
@@ -595,23 +538,9 @@
 					\label{fig:-03_hardware-hw5-rtl_bcg-png}
 				\end{figure}
 
-		
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={\texttt{BranchConditionGen.sv}},
-					breaklines=false,
-					label={fig:BCG}
-				]{../03_hardware/otter/src/BranchConditionGen.sv}
-
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={\texttt{BranchConditionGen\_tb.sv}},
-					breaklines=false,
-					label={fig:BCGtb}
-				]{../03_hardware/otter/sim/BranchConditionGen_tb.sv}
-
+				See \texttt{BranchConditionGen.sv}\ref{otter:bcondgen} 
+				and sim test \texttt{BranchConditionGen\_tb.sv} \ref{ottertest:bcondgen}. 
+	
 			\subsubsection{Branch Address Generator}
 		
 				The BAG is used to modify the program counter! We want
@@ -626,22 +555,216 @@
 					\label{fig:-03_hardware-hw5-rtl_bag-png}
 				\end{figure}
 
-		
-				\lstinputlisting[
-					language={Verilog},
-					captionpos=top,
-					caption={\texttt{BranchAddrGen.sv}},
-					breaklines=false,
-					label={fig:BAG}
-				]{../03_hardware/otter/src/BranchAddrGen.sv}
+				See \texttt{BranchAddrGen.sv}\ref{otter:baddrgen} 
+				and sim test \texttt{BranchAddrGen\_tb.sv} \ref{ottertest:baddrgen}. 
+
+		\newpage
+		\subsection{HW6 - Control Unit}
+
+			Data and control mapping is different for each type of instruction.
+			Therefore, I've provided the various configurations per instruction
+			type below. 
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d1.png}
+				\caption{MultiCycle Otter Pathing for \texttt{load}}
+				\label{fig:map-load}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d2.png}
+				\caption{MultiCycle Otter Pathing for \texttt{immed ops}}
+				\label{fig:map-immed}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d3.png}
+				\caption{MultiCycle Otter Pathing for \texttt{auipc}}
+				\label{fig:map-auipc}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d4.png}
+				\caption{MultiCycle Otter Pathing for \texttt{store}}
+				\label{fig:map-store}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d5.png}
+				\caption{MultiCycle Otter Pathing for \texttt{dual register ops}}
+				\label{fig:map-dual}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d6.png}
+				\caption{MultiCycle Otter Pathing for \texttt{lui}}
+				\label{fig:map-lui}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d7.png}
+				\caption{MultiCycle Otter Pathing for \texttt{branch}}
+				\label{fig:map-branch}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d8.png}
+				\caption{MultiCycle Otter Pathing for \texttt{jalr}}
+				\label{fig:map-jalr}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/d9.png}
+				\caption{MultiCycle Otter Pathing for \texttt{jal}}
+				\label{fig:map-jal}
+			\end{figure}
+
+			\subsubsection{Control Unit Decoder}
+
+				After mapping the data and control signals, we need a way
+				to control data flowing into the ALU, register file, program
+				counter, as well as the ALU itself. We depend on the Decoder
+				to do this, writing to the selectors for each mux. Note
+				that the decoder can only make an intelligent switch during
+				and after the EXEC cycle s.t. the opcode is available to process. 
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/decoder_module.png}
+					\caption{Control Unit Decoder Top Level}
+					\label{fig:hw6-decoder-module}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/decoder_rtl.png}
+					\caption{Control Unit Decoder RTL}
+					\label{fig:hw6-decoder-rtl}
+				\end{figure}
+
+				See \texttt{CUnit\_Decoder.sv} \ref{otter:cudecoder} and 
+				sim test cases \texttt{CUnit\_Decoder\_tb.sv} \ref{ottertest:cudecoder}.
+
+			\subsubsection{Control Unit FSM}
+
+				With the decoder controlling the data/mux selectors, we need
+				a module to issue the control signals for read/writing. 
+				The FSM allows us to do just that, toggling read signals
+				for memory and PC while also controlling when to write
+				contents in memory and registers. We've confined our FSM
+				to 4 stages (INIT, FETCH, EXEC, WRITEBACK). 
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/fsm_module.png}
+					\caption{Control Unit FSM Top Level}
+					\label{fig:hw6-fsm-module}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/hw6/fsm_rtl.png}
+					\caption{Control Unit FSM RTL}
+					\label{fig:hw6-fsm-rtl}
+				\end{figure}
+
+				\textbf{Stages} :
+				\begin{itemize}
+					\item \textbf{INIT} : stage upon startup or reset that
+							zeros out all signals.
+
+					\item \textbf{FETCH} : PC is available and this stage
+							processes the contents at that PC address, tucked away 
+							inside the memory module. By the end, DOUT1 should be 
+							available (and maybe DOUT2 depending on the instr).
+
+					\item \textbf{EXEC} : stage is used to give instr operations
+							runway to compute and arrive to their respective mux channels.
+
+					\item \textbf{WRITEBACK} : stage is used to overwrite a 
+							desired PC, memory, or register.
+							
+				\end{itemize}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.6\textwidth]{../03_hardware/hw6/state_diagram.png}
+					\caption{FSM Diagram}
+					\label{fig:hw6-state_diagram-png}
+				\end{figure}
+
+				See \texttt{CUnit\_FSM.sv} \ref{otter:cufsm} and 
+				sim test cases \texttt{CUnit\_FSM\_tb.sv} \ref{ottertest:cufsm}.
+
+
+			\subsubsection{Otter Micro-Controller}
+
+				At last, we've reached a point where we can combine all created modules
+				from HW2-6 and begin to process memory files with RISCV instructions. 
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/mcu_module.png}
+					\caption{OTTER MCU : Non-Interrupt}
+					\label{fig:hw6-mcu-module}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/hw6/mcu_schematic_export.pdf}
+					\caption{MCU RTL}
+					\label{fig:hw6-mcu-rtl}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.8\textwidth]{../OTTER_arch_multicycle_noCSR.png}
+					\caption{Non-Interrupt MultiCycle RISCV Otter}
+					\label{fig:no-interr-otter}
+				\end{figure}
+
+				To perform a small validation for the MCU, a small assembly file
+				was created, compiled under RARS tool for RISCV compatibility, 
+				and the memory dump (\texttt{otter\_hw6sample\_test.mem}) injected 
+				into the memory portion of the OTTER MCU Memory. 
 
 				\lstinputlisting[
-					language={Verilog},
+					language={[riscv]Assembler},
 					captionpos=top,
-					caption={\texttt{BranchAddrGen\_tb.sv}},
-					breaklines=false,
-					label={fig:BAGtb}
-				]{../03_hardware/otter/sim/BranchAddrGen_tb.sv}
+					caption={Simple Test Script},
+					breaklines=false]
+				{../03_hardware/hw6/demo.asm}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.5\textwidth]{../03_hardware/hw6/memconfig.png}
+					\caption{Memory config for RARS}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=0.5\textwidth]{../03_hardware/hw6/dumpconfig.png}
+					\caption{Memory dump config for RARS}
+				\end{figure}
+
+				\begin{figure}[H]
+					\centering
+					\includegraphics[width=\textwidth]{../03_hardware/hw6/sampletest_waveform.png}
+					\caption{Verification Waveforms in simulation testing}
+				\end{figure}
+
+
+				See \texttt{Otter\_MCU.sv} \ref{otter:mcu} and 
+				sim test cases \texttt{Otter\_MCU\_tb.sv} \ref{ottertest:mcu}.
 
 
 	\newpage
@@ -1266,7 +1389,246 @@
 					{../02_software/sw6/sw6_p2.asm}
 
 	\newpage
-	\section{Appendix}
+	\section{Otter Code \& Test Sims}
+
+		\subsection{Mux(s)}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={2 input Mux \texttt{Mux\_2N.sv}},
+				breaklines=false,
+				label={otter:mux2}
+			]{../03_hardware/otter/src/Mux_2N.sv}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={4 input Mux \texttt{Mux\_4N.sv}},
+				breaklines=false,
+				label={otter:mux4}
+			]{../03_hardware/otter/src/Mux_4N.sv}
+	
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={6 input Mux \texttt{Mux\_6N.sv}},
+				breaklines=false,
+				label={otter:mux6}
+			]{../03_hardware/otter/src/Mux_6N.sv}
+	
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for 6 input Mux \texttt{Mux\_6N\_tb.sv}},
+				breaklines=false,
+				label={ottertest:mux6}
+			]{../03_hardware/otter/sim/Mux_6N_tb.sv}
+	
+		\newpage
+		\subsection{Program Counter and Additives}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Program Counter \texttt{PC\_Reg.sv}},
+				breaklines=false,
+				label={otter:pc}
+			]{../03_hardware/otter/src/PC_Reg.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for Program Counter \texttt{PC\_Reg\_tb.sv}},
+				breaklines=false,
+				label={ottertest:pc}
+			]{../03_hardware/otter/sim/PC_Reg_tb.sv}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={4+ PC Incrementer \texttt{Plus4\_1N.sv}},
+				breaklines=false,
+				label={otter:pc+4}
+			]{../03_hardware/otter/src/Plus4_1N.sv}
+
+
+		\newpage
+		\subsection{Register File}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Register File \texttt{RegFile.sv}},
+				breaklines=false,
+				label={otter:regfile}
+			]{../03_hardware/otter/src/RegFile.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for Register File \texttt{RegFile\_tb.sv}},
+				breaklines=false,
+				label={ottertest:regfile}
+			]{../03_hardware/otter/sim/RegFile_tb.sv}
+
+		\newpage
+		\subsection{Arithmetic Logic Unit}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={ALU \texttt{ALU.sv}},
+				breaklines=false,
+				label={otter:alu}
+			]{../03_hardware/otter/src/ALU.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for ALU \texttt{ALU\_tb.sv}},
+				breaklines=false,
+				label={ottertest:alu}
+			]{../03_hardware/otter/sim/ALU_tb.sv}
+
+		\newpage
+		\subsection{Immediate Generator}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Immediate Gen \texttt{ImmedGen.sv}},
+				breaklines=false,
+				label={otter:immgen}
+			]{../03_hardware/otter/src/ImmedGen.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for ImmedGen \texttt{ImmedGen\_tb.sv}},
+				breaklines=false,
+				label={ottertest:immgen}
+			]{../03_hardware/otter/sim/ImmedGen_tb.sv}
+
+
+		\newpage
+		\subsection{Memory}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Memory module \texttt{otter\_memory\_v1\_07.sv}},
+				breaklines=false,
+				label={otter:memory}
+			]{../03_hardware/otter/src/otter_memory_v1_07.sv}
+
+			\iffalse
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for ImmedGen \texttt{ImmedGen\_tb.sv}},
+				breaklines=false,
+				label={ottertest:immgen}
+			]{../03_hardware/otter/sim/ImmedGen_tb.sv}
+			\fi
+
+
+		\newpage
+		\subsection{Branch Address Generator}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Branch Address Generator \texttt{BranchAddrGen.sv}},
+				breaklines=false,
+				label={otter:baddrgen}
+			]{../03_hardware/otter/src/BranchAddrGen.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for Branch Addr Gen \texttt{BranchAddrGen\_tb.sv}},
+				breaklines=false,
+				label={ottertest:baddrgen}
+			]{../03_hardware/otter/sim/BranchAddrGen_tb.sv}
+
+		\newpage
+		\subsection{Branch Condition Generator}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Branch Condition Generator \texttt{BranchConditionGen.sv}},
+				breaklines=false,
+				label={otter:bcondgen}
+			]{../03_hardware/otter/src/BranchConditionGen.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for Branch Condition Gen \texttt{BranchConditionGen\_tb.sv}},
+				breaklines=false,
+				label={ottertest:bcondgen}
+			]{../03_hardware/otter/sim/BranchConditionGen_tb.sv}
+			
+
+		\newpage
+		\subsection{Control Unit Decoder}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Control Unit Decoder \texttt{CUnit\_Decoder.sv}},
+				breaklines=false,
+				label={otter:cudecoder}
+			]{../03_hardware/otter/src/CUnit_Decoder.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for Control Unit Decoder \texttt{CUnit\_Decoder\_tb.sv}},
+				breaklines=false,
+				label={ottertest:cudecoder}
+			]{../03_hardware/otter/sim/CUnit_Decoder_tb.sv}
+
+		\newpage
+		\subsection{Control Unit Finite State Machine}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Control Unit FSM \texttt{CUnit\_FSM.sv}},
+				breaklines=false,
+				label={otter:cufsm}
+			]{../03_hardware/otter/src/CUnit_FSM.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for Control Unit FSM \texttt{CUnit\_FSM\_tb.sv}},
+				breaklines=false,
+				label={ottertest:cufsm}
+			]{../03_hardware/otter/sim/CUnit_FSM_tb.sv}
+
+
+		\newpage
+		\subsection{MicroController}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Otter MCU \texttt{Otter\_MCU.sv}},
+				breaklines=false,
+				label={otter:mcu}
+			]{../03_hardware/otter/src/Otter_MCU.sv}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={TestSim for MCU, \texttt{CUnit\_FSM\_tb.sv}, using RARS from \texttt{demo.asm}},
+				breaklines=false,
+				label={ottertest:mcu}
+			]{../03_hardware/otter/sim/Otter_MCU_tb.sv}
 
 
 \end{document}

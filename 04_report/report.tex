@@ -561,6 +561,13 @@
 		\newpage
 		\subsection{HW6 - Control Unit}
 
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../03_hardware/hw6/so_far.png}
+				\caption{MultiCycle Otter after HW6}
+				\label{fig:w6otter}
+			\end{figure}
+
 			Data and control mapping is different for each type of instruction.
 			Therefore, I've provided the various configurations per instruction
 			type below. 
@@ -765,6 +772,33 @@
 
 				See \texttt{Otter\_MCU.sv} \ref{otter:mcu} and 
 				sim test cases \texttt{Otter\_MCU\_tb.sv} \ref{ottertest:mcu}.
+
+		\newpage
+		\subsection{HW7 - Otter Wrapper}
+
+			The Otter Wrapper expanded the MCU I/O BUS capabilities to accept
+			the onboard switches as input as well as LED/7SEG as outputs (as
+			defined in the constraints file \ref{otter:constraint}). In integrating 
+			the new peripherals, we've injected a testall memory dump \texttt{diego\_Test\_All.mem} 
+			that ideally exercises all RISCV-I instructions and displays the results
+			on actual hardware, giving a visual inspection of the hardware 
+			as well as the internals. All of these tests passed accordingly. 
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth]{../03_hardware/hw7/wrapper_schematic.png}
+				\caption{Otter Wrapper Schematic}
+			\end{figure}
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth]{../03_hardware/hw7/wrapper_rtl.png}
+				\caption{Otter Wrapper RTL}
+			\end{figure}
+
+			See \ref{otter:wrap} and \ref{ottertest:wrap} for wrapper code and test
+			sim. 
+			
 
 
 	\newpage
@@ -1663,6 +1697,62 @@
 				breaklines=false,
 				label={ottertest:mcu}
 			]{../03_hardware/otter/sim/Otter_MCU_tb.sv}
+
+
+		\newpage
+		\subsection{Seven Segment}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Binary-Coded Decimal\texttt{BCD.sv}},
+				breaklines=false,
+				label={otter:bcd}
+			]{../03_hardware/otter/src/BCD.sv}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={\texttt{CathodeDriver.sv}},
+				breaklines=false,
+				label={otter:catho}
+			]{../03_hardware/otter/src/CathodeDriver.sv}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Seven Segment Display Driver \texttt{SevSegDisp.sv}},
+				breaklines=false,
+				label={otter:seven}
+			]{../03_hardware/otter/src/SevSegDisp.sv}
+
+		\newpage
+		\subsection{Peripheral Fabric}
+		
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Otter Wrapper \texttt{OTTER\_Wrapper\_v1\_02.sv}},
+				breaklines=false,
+				label={otter:wrap}
+			]{../03_hardware/otter/src/OTTER_Wrapper_v1_02.sv}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Visual testsim for Otter Wrapper \texttt{OTTER\_Wrapper\_tb.sv}},
+				breaklines=false,
+				label={ottertest:wrap}
+			]{../03_hardware/otter/sim/OTTER_Wrapper_tb.sv}
+
+			\lstinputlisting[
+				language={Verilog},
+				captionpos=top,
+				caption={Peripheral Bindings \texttt{Basys3\_Master.xdc}},
+				breaklines=true,
+				label={otter:constraint}
+			]{../03_hardware/otter/constraint/Basys3_Master.xdc}
+
 
 
 \end{document}

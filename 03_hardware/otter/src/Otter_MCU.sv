@@ -23,7 +23,7 @@
 module Otter_MCU(
     input logic [31:0]  IOBUS_IN, 
     input logic         RST, 
-    input logic         INTRR, 
+    //input logic         INTRR, 
     input logic         CLK, 
     
     output logic [31:0] IOBUS_OUT, 
@@ -45,8 +45,7 @@ module Otter_MCU(
     // ~~ memory ~~
     logic           mem_rden1; 
     logic           mem_rden2; 
-    logic           mem_we2; 
-    logic [31:0]    din2; 
+    logic           mem_we2;  
     logic [31:0]    ir, dout2; 
     
     // ~~ reg file + mux ~~
@@ -105,7 +104,7 @@ module Otter_MCU(
         .MEM_WE2(mem_we2),      // 1'b I
         .MEM_ADDR1(pc[15:2]),   // 14'b I  
         .MEM_ADDR2(result),     // 32'b I
-        .MEM_DIN2(din2),        // 32'b I
+        .MEM_DIN2(rs2),         // 32'b I
         .MEM_SIZE(ir[13:12]),   // 2'b I
         .MEM_SIGN(ir[14]),      // 1'b I
         .IO_IN(IOBUS_IN),       // 32'b I  

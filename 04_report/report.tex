@@ -1388,6 +1388,40 @@
 					breaklines=false]
 					{../02_software/sw6/sw6_p2.asm}
 
+		\newpage
+		\subsection{SW7 - Interrupts}
+	
+			Awkwardly enough, RARS doesn't support interrupts. This leaves me at 
+			an impasse such that a polling 'main' function could be implemented using
+			the \textit{Keyboard and Display MMIO Simulator} setting but that 
+			won't use the CSR instructions I suspect what we want to use here. 
+			BUT using CSR instructions ultimately means that the program wont be able 
+			to be tested by RARS but only compiled into memory. For brevity, 
+			I've opted to skip the RARS portion and map out the flow charts for now\ldots
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.8\textwidth]{../02_software/sw7/assignment.png}
+				\caption{Questions to address}
+				\label{fig:sw7-assign}
+			\end{figure}
+			
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=0.6\textwidth]{../02_software/sw7/p1_flow.png}
+				\caption{Flow chart for part 1}
+				\label{fig:sw7-p1-flow}
+			\end{figure}	
+
+			\begin{figure}[H]
+				\centering
+				\includegraphics[width=\textwidth]{../02_software/sw7/p2_flow.png}
+				\caption{Flow chart for part 2}
+				\label{fig:sw7-p2-flow}
+			\end{figure}	
+
+
 	\newpage
 	\section{Otter Code \& Test Sims}
 

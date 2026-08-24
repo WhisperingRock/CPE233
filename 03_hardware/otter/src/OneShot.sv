@@ -85,31 +85,16 @@ module OneShot
                 OUT         = 1'b1;
                 
                 if(t_elap_ns >= (DUR_CNT - INC_CNT)) begin
-                    next_state  = INACTIVE;
-                    next_t_elap_ns   = 0;  
+                    next_state  	= INACTIVE;
+                    next_t_elap_ns	= 0;  
                 end
                 
                 else begin 
-                    next_state  = PULSE;
-                    next_t_elap_ns = t_elap_ns + INC_CNT; 
+                    next_state  	= PULSE;
+                    next_t_elap_ns 	= t_elap_ns + INC_CNT; 
                 end
             end
-            /*
-            INC:        begin
-                OUT         = 1'b1;
-                
-                if(t_elap_ns >= DUR_CNT) begin
-                    next_state  = INACTIVE;
-                    next_t_elap_ns   = 0;  
-                end
-                
-                else begin
-                    next_state  = PULSE;
-                    next_t_elap_ns = t_elap_ns + INC_CNT;
-                end
-            end
-            */
-    
+   
             default:    begin
                 OUT         = 1'b0;
                 next_state  = INACTIVE;

@@ -29,24 +29,44 @@ package tb_utils_pkg;
     
     */
     class testcase;
-    
-        int err_cnt     = 0;
-        int testnum     = 0;
+        // ~~ attributes ~~
+        int unsigned err_cnt;
+        int unsigned testnum;
         
+        // ~~ constructors ~~
+        function new();
+            this.err_cnt = 0;
+            this.testnum = 0;
+        endfunction
+        
+        // ~~ methods ~~
         function void new_test(input string mes);
-            testnum++;
-            err_cnt = 0;
-            $display("\nStarting TC%0d : %s", testnum, mes);
+            this.testnum++;
+            this.err_cnt = 0;
+            $display("\nStarting TC%0d : %s", this.testnum, mes);
         endfunction
         
         function void err(input string mes); 
-            err_cnt++; 
-            $display("|\tERROR: %s", mes);
+            this.err_cnt++; 
+            $display("|\t\tERROR: %s", mes);
         endfunction: err 
 
         function void test_done();
-            $display("TC%0d complete : %0d ERRORS\n", testnum, err_cnt);
+            if(err_cnt > 0) begin
+                $display("TC%0d complete : %0d ERRORS\n", this.testnum, this.err_cnt);
+            end
+            
+            else begin
+                $display("TC%0d complete : SUCCESS\n", this.testnum);
+            end
         endfunction
-    
+        
+        function int get_testnum();
+            return this.testnum; 
+        endfunction
+        
+        function void print_subtest(input string mes);
+            $display("|-%s", mes);
+        endfunction
     endclass
 endpackage

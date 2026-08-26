@@ -17,6 +17,10 @@
 // Revision 0.01 - File Created
 // Additional Comments:
 // 
+//
+//      ASSUMPTIONS:
+//          - CSR is not checking whether intr is enabled, only storing 
+//              the mie bit. The CUFSM is gatekeeping the start of intr
 //////////////////////////////////////////////////////////////////////////////////
 
 
@@ -39,20 +43,23 @@ module ControlStatusRegister_tb();
     logic [31:0]    wd_word;
     
     // ~~ outputs ~~
-    logic           mei; 
+    logic           mie; 
     logic [31:0]    mtvec; 
     logic [31:0]    mepc; 
     logic [31:0]    rd_word; 
     
     // ~~ consts ~~
     localparam [11:0]   mstatus_addr        = 12'h300;
-    const int           mstatus_mei_bit     = 3;
-    const int           mstatus_mpie_bit    = 7; 
+    const int           mstatus_mie_bit     = 3;
+    const int           mie_word            = 32'h0000_0000 | (1'b1 << mstatus_mie_bit);
+    const int           mstatus_mpie_bit    = 7;
+    const int           mpie_word           = 32'h0000_0000 | (1'b1 << mstatus_mpie_bit);
     localparam [11:0]   mtvec_addr          = 12'h305;
     localparam [11:0]   mepc_addr           = 12'h341;
     
     // ~~ testing ~~
-    testcase tc; 
+    testcase tc;
+    logic [31:0] tnum;  
     
     // ~~~~ module instances ~~~~
     ControlStatusRegister UUT(
@@ -64,7 +71,7 @@ module ControlStatusRegister_tb();
         .ADDR(csr_addr),            // 12'b I
         .PC(pc),                    // 32'b I
         .WD(wd_word),               // 32'b I
-        .MSTATUS_MIE(mei),          // 1'b O
+        .MSTATUS_MIE(mie),          // 1'b O
         .MTVEC(mtvec),              // 32'b O
         .MEPC(mepc),                // 32'b O  
         .RD(rd_word)                // 32'b O
@@ -94,8 +101,9 @@ module ControlStatusRegister_tb();
         wd_word     = 32'h0000_0000;
         #25;  
         
-        // ~~ TC1 : init register contents are cleared ~~
-        tc.new_test("CSR holds data");     
+        // ~~ TC1 ~~
+        tc.new_test("CSR initialized data");
+        tnum = tc.get_testnum();     
             csr_addr = mstatus_addr;
             #8; 
             assert(rd_word === 32'h0000_0000)   else tc.err("MSTATUS reg was not init to zero");
@@ -105,7 +113,74 @@ module ControlStatusRegister_tb();
         tc.test_done();
         
         
+        // ~~ TC2 ~~
+        tc.new_test("enter INTRPT state");
+        tnum = tc.get_testnum();
         
-    
+            // enable intrr
+            csr_addr    = mstatus_addr;
+            wd_word     = mie_word;
+            #10;  
+            wr_en       = 1'b1;
+            #10;
+            wr_en       = 1'b0;
+            assert(rd_word === mie_word)        else tc.err("MEI not set");
+            
+            // place ISR addr into mtvec
+            csr_addr    = mtvec_addr;
+            wd_word     = 32'hDEAD_BEEF;
+            #10;  
+            wr_en       = 1'b1;
+            #10;
+            wr_en       = 1'b0;
+            assert(mtvec === 32'hDEAD_BEEF)     else tc.err("MTVEC not set");
+            
+            // enter INTRPT
+            csr_addr    = mstatus_addr;    
+            pc          = 32'h1234_ABCD;
+            intr_taken  = 1'b1; 
+            #8; 
+            assert(rd_word === mpie_word)       else tc.err("MPIE swap didn't occur");
+            assert(mtvec === 32'hDEAD_BEEF)     else tc.err("MTVEC changed");
+            assert(mepc === 32'h1234_ABCD)      else tc.err("MEPC reg not storing pc");
+            #2;
+            intr_taken  = 1'b0;
+            #10; 
+        tc.test_done();
+        
+        // ~~ TC3 ~~
+        tc.new_test("exiting interrupt ISR");
+        tnum = tc.get_testnum();
+            csr_addr    = mstatus_addr;
+            intr_return = 1'b1; 
+            #8; 
+            assert(rd_word === mie_word)       else tc.err("MPIE swap didn't occur");
+            assert(mie === 1'b1)               else tc.err("MIE didn't restore");
+            assert(mepc === 32'h1234_ABCD)     else tc.err("MEPC did not protect pc");
+            #2;
+            intr_return = 1'b0;
+            #10;
+            assert(rd_word === mie_word)       else tc.err("MPIE swap didn't occur");
+            assert(mie === 1'b1)               else tc.err("MIE didn't restore");
+            assert(mepc === 32'h1234_ABCD)     else tc.err("MEPC did not protect pc");
+        tc.test_done();
+        
+         // ~~ TC4 ~~
+        tc.new_test("reset");
+        tnum = tc.get_testnum();
+            reset       = 1'b1;
+            intr_taken  = 1'b0;
+            intr_return = 1'b0;  
+            wr_en       = 1'b0;
+            csr_addr    = mstatus_addr;
+            #8;
+            assert(rd_word === 32'h0000_0000)   else tc.err("MSTATUS didn't reset");
+            assert(mie === 1'b0)                else tc.err("MIE didn't reset");
+            assert(mtvec === 32'h0000_0000)     else tc.err("MTVEC didn't reset");
+            assert(mepc === 32'h0000_0000)      else tc.err("MEPC didn't reset");
+            #2;
+            reset       = 1'b0;
+        tc.test_done();
+       
     end
 endmodule

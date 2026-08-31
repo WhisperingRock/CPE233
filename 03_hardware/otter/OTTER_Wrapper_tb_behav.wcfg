@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="OTTER_Wrapper_tb_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="OTTER_Wrapper_tb" />
+            <top_module name="\$unit_RegFile_sv_1821232846 " />
+            <top_module name="glbl" />
+            <top_module name="tb_utils_pkg" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="8,098.180 ns"></ZoomStartTime>
+      <ZoomEndTime time="8,731.681 ns"></ZoomEndTime>
+      <Cursor1Time time="1,200.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="235"></NameColumnWidth>
+      <ValueColumnWidth column_width="92"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="17" />
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/tnum">
+      <obj_property name="ElementShortName">tnum[31:0]</obj_property>
+      <obj_property name="ObjectShortName">tnum[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/OTTER_Wrapper_tb/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/OTTER_Wrapper_tb/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/OTTER_Wrapper_tb/interrupt">
+      <obj_property name="ElementShortName">interrupt</obj_property>
+      <obj_property name="ObjectShortName">interrupt</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/OTTER_Wrapper_tb/UUT/ONESHOT_INTRR/OUT">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">OUT</obj_property>
+      <obj_property name="ObjectShortName">OUT</obj_property>
+      <obj_property name="label">OneSHOT_OUT</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/switches">
+      <obj_property name="ElementShortName">switches[15:0]</obj_property>
+      <obj_property name="ObjectShortName">switches[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/catho">
+      <obj_property name="ElementShortName">catho[7:0]</obj_property>
+      <obj_property name="ObjectShortName">catho[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/CU_FSM/curr_state">
+      <obj_property name="ElementShortName">curr_state[2:0]</obj_property>
+      <obj_property name="ObjectShortName">curr_state[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/CU_FSM/INT_TAKEN">
+      <obj_property name="ElementShortName">INT_TAKEN</obj_property>
+      <obj_property name="ObjectShortName">INT_TAKEN</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/CU_FSM/MRET_EXEC">
+      <obj_property name="ElementShortName">MRET_EXEC</obj_property>
+      <obj_property name="ObjectShortName">MRET_EXEC</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/CSR/PC">
+      <obj_property name="ElementShortName">PC[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PC[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/REG_FILE/ram[6]">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[6][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[6][31:0]</obj_property>
+      <obj_property name="label">t1</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/REG_FILE/ram[7]">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">[7][31:0]</obj_property>
+      <obj_property name="ObjectShortName">[7][31:0]</obj_property>
+      <obj_property name="label">t2</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/REG_FILE/ADR1">
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="ElementShortName">ADR1[4:0]</obj_property>
+      <obj_property name="ObjectShortName">ADR1[4:0]</obj_property>
+      <obj_property name="label">mem_dout1</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/csr_mepc">
+      <obj_property name="ElementShortName">csr_mepc[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csr_mepc[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/csr_mtvec">
+      <obj_property name="ElementShortName">csr_mtvec[31:0]</obj_property>
+      <obj_property name="ObjectShortName">csr_mtvec[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/OTTER_Wrapper_tb/UUT/OTTER_MCU/CSR/mstatus">
+      <obj_property name="ElementShortName">mstatus[31:0]</obj_property>
+      <obj_property name="ObjectShortName">mstatus[31:0]</obj_property>
+   </wvobject>
+</wave_config>

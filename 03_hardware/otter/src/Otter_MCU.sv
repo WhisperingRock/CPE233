@@ -23,7 +23,7 @@
 module Otter_MCU(
     input logic [31:0]  IOBUS_IN, 
     input logic         RST, 
-    //input logic         INTRR, 
+    input logic         INTRR, 
     input logic         CLK, 
     
     output logic [31:0] IOBUS_OUT, 
@@ -37,7 +37,7 @@ module Otter_MCU(
     // ~~ pc + mux ~~
     logic           reset; 
     logic           pc_write; 
-    logic [1:0]     pc_source; 
+    logic [2:0]     pc_source; 
     logic [31:0]    pc;
     logic [31:0]    pc_p4;
     logic [31:0]    pcmux_out;
@@ -61,13 +61,19 @@ module Otter_MCU(
     logic [31:0]    jalr, branch, jal;
     
     // ~~ alu + mux ~~
-    logic           alu_src_a;
-    logic [1:0]     alu_src_b;
+    logic [1:0]     alu_src_a;
+    logic [2:0]     alu_src_b;
     logic [3:0]     alu_func; 
     logic [31:0]    src_a, src_b, result;
     
-    // ~~ csr ~~ ????????????????????????????????????????????????
-    logic [31:0]    csr_reg; 
+    // ~~ csr ~~ 
+    logic           mret_exec; 
+    logic           int_taken;
+    logic           csr_we;
+    logic           csr_mstatus_mie;
+    logic [31:0]    csr_mepc;
+    logic [31:0]    csr_mtvec;
+    logic [31:0]    csr_rd;
                     
     // ~~ bcond + control decode and fsm ~~
     logic           br_eq, br_lt, br_ltu;
@@ -82,11 +88,13 @@ module Otter_MCU(
         .PC_COUNT(pc)           // 32'b O
      );
        
-    Mux_4N #(32) PC_MUX(                              
+    Mux_6N #(32) PC_MUX(                              
         .D0(pc_p4),             // 32'b I 
         .D1(jalr),              // 32'b I
         .D2(branch),            // 32'b I
         .D3(jal),               // 32'b I
+        .D4(csr_mtvec),         // 32'b I
+        .D5(csr_mepc),          // 32'b I
         .S(pc_source),          // 2'b I
         .Y(pcmux_out)           // 32'b O
     );
@@ -116,7 +124,7 @@ module Otter_MCU(
           
     Mux_4N #(32) REG_MUX(                              
         .D0(pc_p4),             // 32'b I 
-        .D1(csr_reg),           // 32'b I
+        .D1(csr_rd),           // 32'b I
         .D2(dout2),             // 32'b I
         .D3(result),            // 32'b I
         .S(rf_wr_sel),          // 2'b I
@@ -155,18 +163,20 @@ module Otter_MCU(
         .BRANCH(branch)         // 32'b O
     );
     
-    Mux_2N #(32) ALU_SRCA_MUX(                              
+    Mux_3N #(32) ALU_SRCA_MUX(                              
         .D0(rs1),               // 32'b I 
         .D1(ut),                // 32'b I
+        .D2(~rs1),              // 32'b I
         .S(alu_src_a),          // 2'b I
         .Y(src_a)               // 32'b O
     );
             
-    Mux_4N #(32) ALU_SRCB_MUX(                              
+    Mux_5N #(32) ALU_SRCB_MUX(                              
         .D0(rs2),               // 32'b I 
         .D1(it),                // 32'b I
         .D2(st),                // 32'b I
         .D3(pc),                // 32'b I
+        .D4(csr_rd),                // 32'b I
         .S(alu_src_b),          // 2'b I
         .Y(src_b)               // 32'b O
     );
@@ -194,23 +204,44 @@ module Otter_MCU(
         .BR_EQ(br_eq),          // 1'b I
         .BR_LT(br_lt),          // 1'b I
         .BR_LTU(br_ltu),        // 1'b I
+        .INT_TAKEN(int_taken),  // 1'b I
         .ALU_FUNC(alu_func),    // 4'b O
-        .ALU_SRC_A(alu_src_a),      // 1'b O
-        .ALU_SRC_B(alu_src_b),      // 2'b O
+        .ALU_SRC_A(alu_src_a),  // 1'b O
+        .ALU_SRC_B(alu_src_b),  // 2'b O
         .PC_SOURCE(pc_source),  // 2'b O
         .RF_WR_SEL(rf_wr_sel)   // 2'b O
+        
     );
     
     CUnit_FSM CU_FSM(
-        .CLK(CLK),              // 1'b I
-        .RST(RST),              // 1'b I
-        //.INTRR(),             // 1'b I
-        .OPCODE(ir[6:0]),       // 7'b I
-        .PC_WRITE(pc_write),    // 1'b O
-        .REG_WRITE(reg_write),  // 1'b O
-        .MEM_RDEN1(mem_rden1),  // 1'b O
-        .MEM_RDEN2(mem_rden2),  // 1'b O
-        .MEM_WE2(mem_we2),      // 1'b O
-        .RESET(reset)           // 1'b O
+        .CLK(CLK),                                  // 1'b I
+        .RST(RST),                                  // 1'b I
+        .INTRR(INTRR & csr_mstatus_mie),            // 1'b I
+        .OPCODE(ir[6:0]),                           // 7'b I
+        .FUNC3(ir[14:12]),                          // 3'b I
+        .PC_WRITE(pc_write),                        // 1'b O
+        .REG_WRITE(reg_write),                      // 1'b O
+        .MEM_RDEN1(mem_rden1),                      // 1'b O
+        .MEM_RDEN2(mem_rden2),                      // 1'b O
+        .MEM_WE2(mem_we2),                          // 1'b O
+        .RESET(reset),                              // 1'b O
+        .CSR_WE(csr_we),                            // 1'b O
+        .INT_TAKEN(int_taken),                      // 1'b O
+        .MRET_EXEC(mret_exec)                       // 1'b O
+    );
+    
+    ControlStatusRegister CSR(
+        .CLK(CLK),                      // 1'b I
+        .RST(reset),                    // 1'b I
+        .INTR_TAKEN(int_taken),         // 1'b I
+        .INTR_RET(mret_exec),           // 1'b I
+        .WR_EN(csr_we),                 // 1'b I
+        .ADDR(ir[31:20]),               // 12'b I
+        .PC(pc),                        // 32'b I
+        .WD(result),                    // 32'b I
+        .MSTATUS_MIE(csr_mstatus_mie),  // 1'b O
+        .MTVEC(csr_mtvec),               // 32'b O
+        .MEPC(csr_mepc),               // 32'b O
+        .RD(csr_rd)                     // 32'b O
     );
 endmodule

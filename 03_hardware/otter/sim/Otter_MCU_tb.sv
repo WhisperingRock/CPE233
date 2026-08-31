@@ -15,7 +15,9 @@
 // 
 // Revision:
 // Revision 0.01 - File Created
-// Additional Comments: Ensure mem file is using sample code from hw6
+// Additional Comments: 
+//
+//  ----->  Ensure mem file is using sample code from hw6 "otter_hw6sample_test.mem"
 // 
 //////////////////////////////////////////////////////////////////////////////////
 

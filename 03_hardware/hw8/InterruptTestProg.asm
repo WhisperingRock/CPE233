@@ -27,11 +27,11 @@
 # s2 : Interrupt error Flag
 # s3 : Fail Code 
 ################################################################################
-.eqv MMIO,		0x11000000 			# MMIO address and offsets
-.eqv LEDS,		0x20	
-.eqv SEV_SEG,	0x40
-.eqv STACK,		0x10000
-.eqv INT_EN, 	8					# enable interrupts MSTATUS = 0x08
+.equ MMIO,		0x11000000 			# MMIO address and offsets
+.equ LEDS,		0x20	
+.equ SEV_SEG,	0x40
+.equ STACK,		0x10000				# stack grows downward
+.equ INT_EN, 	8					# enable interrupts MSTATUS = 0x08
 
 .data
 INTR_COUNT: .half 0					# keep interrupt count in data segment
@@ -47,7 +47,7 @@ INIT:
 	addi	t1, x0, 0
 	csrrw	t1, mtvec, t0				# read mtvec
 	addi	s3, x0, 1					# ERROR Code 1	
-	bne	t0, t1, FAIL					# check mtvec
+	bne		t0, t1, FAIL				# check mtvec
 	addi	s1, x0, 0					# clear interrupt flag
 	addi	s2, x0, 0					# clear interrupt error flag
 	sw		x0, SEV_SEG(s0)				# clear 7 seg

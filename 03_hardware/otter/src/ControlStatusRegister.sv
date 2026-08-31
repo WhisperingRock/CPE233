@@ -67,6 +67,7 @@ module ControlStatusRegister(
     // ~~~~ combinational logic ~~
     always_comb begin
         
+        // ~~ assign port outputs ~~
         MSTATUS_MIE = mstatus[mstatus_mie_bit];
         MTVEC       = mtvec;
         MEPC        = mepc;
@@ -111,7 +112,7 @@ module ControlStatusRegister(
         // ~~ priority 3 : update csr register contents ~~
         else if(WR_EN == 1'b1) begin
             case(ADDR)
-                mstatus_addr:   begin mstatus <= WD; end                // TODO : mask this guy
+                mstatus_addr:   begin mstatus <= WD; end                // TODO : mask this guy??
                 
                 mtvec_addr:     begin mtvec <= WD; end
                 

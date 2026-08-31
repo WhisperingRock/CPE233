@@ -67,6 +67,7 @@ module Memory (
     logic [31:0] memReadWord, ioBuffer, memReadSized;
     logic [1:0] byteOffset;
     logic weAddrValid;      // active when saving (WE) to valid memory address
+    localparam [31:0] MMIO_ADDR = 32'h0001_0000;
 
 	// ~~~~ attributes (for memory) ~~~~ 
     (* rom_style="{distributed | block}" *)
@@ -79,8 +80,10 @@ module Memory (
 		//$readmemh("tc10x10.mem", memory, 0, 16383);
 		//$readmemh("tc16x16.mem", memory, 0, 16383);
 		
-		//$readmemh("otter_hw6sample_test.mem", memory, 0, 16383);
-		$readmemh("diego_Test_All.mem", memory, 0, 16383);
+		//$readmemh("otter_hw6sample_test.mem", memory, 0, 16383);            // cpe233 : hw6
+		//$readmemh("diego_Test_All.mem", memory, 0, 16383);                  // cpe233 : hw7
+		$readmemh("InterruptTestProg_defaultmap.mem", memory, 0, 16383);    // cpe233 : hw8
+		
 	end
     
 	// ~~~~ todo ~~~~
@@ -171,7 +174,7 @@ module Memory (
     // ~~~~ MemoryMapped IO ~~~~
 	always_comb 
 	begin
-		if(MEM_ADDR2 >= 32'h0001_0000)					// external address range (beyond stack)
+		if(MEM_ADDR2 >= MMIO_ADDR)					// external address range (beyond stack)
 		begin
 			IO_WR = MEM_WE2;							// IO Write
 			MEM_DOUT2 = ioBuffer;						// IO read from buffer
